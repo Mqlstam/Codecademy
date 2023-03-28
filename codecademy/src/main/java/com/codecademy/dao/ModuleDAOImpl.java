@@ -18,8 +18,6 @@ public class ModuleDAOImpl implements ModuleDAO {
     }
 
 
-    public ModuleDAOImpl() {
-    }
 
 
     @Override
@@ -32,6 +30,7 @@ public class ModuleDAOImpl implements ModuleDAO {
 
             while (result.next()) {
                 list.add(result.getString("ModuleId"));
+                System.out.println("hello");
             }
             return list;
         } catch (SQLException e) {
