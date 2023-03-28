@@ -1,4 +1,4 @@
-package com.codecademy.database;
+package com.codecademy.dataAccessLayer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
