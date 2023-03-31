@@ -47,5 +47,28 @@ public void getAverageProgressPerModule(int courseId) {
     }
 }
 
-    
+    @Override
+    public boolean hasCompletedAllModules(String emailAddress, int courseId) {
+
+       try(Connection db = dbConnection.getConnection()) {
+           
+        String checkCompletionQuery = "SELECT COUNT(*) AS module_count FROM Module WHERE ContentItemID IN (SELECT ContentItemID FROM CursistContentItem WHERE EmailAddress = ? AND PercentageViewed = 100)";
+        PreparedStatement checkCompletionStmt = db.prepareStatement(checkCompletionQuery);
+        checkCompletionStmt.setString(1, emailAddress);
+        ResultSet rs = checkCompletionStmt.executeQuery();
+
+        int moduleCount = 0;
+        if (rs.next()) {
+            moduleCount = rs.getInt("module_count");
+        }
+        return moduleCount > 0;
+    } catch (SQLException e) {
+        System.out.println("Error while checking if all modules are completed: " + e.getMessage());
+    }
+        return false;
+    }
 }
+       
+        
+
+

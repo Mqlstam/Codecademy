@@ -47,11 +47,9 @@ public class CertificateDAOimpl implements CertificateDAO{
     public void addCertificate(Certificate certificate) {
 
         try (Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("INSERT INTO Certificate VALUES(?, ?, ?, ?)");
-            query.setString(1, certificate.getCertificateID());
-            query.setDouble(2, certificate.getGrade());
-            query.setString(3, certificate.getEmployee());
-            query.setTimestamp(4, timestamp.valueOf(certificate.getEnrollmenDateTime()));
+            PreparedStatement query = db.prepareStatement("INSERT INTO Certificate VALUES(?, ?)");
+            query.setDouble(1, certificate.getGrade());
+            query.setString(2, certificate.getEmployee());
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error in addCertificate");
@@ -64,12 +62,11 @@ public class CertificateDAOimpl implements CertificateDAO{
     public void updateCertificate(Certificate certificate) {
 
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("UPDATE Certificate SET Enrollmentdate = ?, Grade = ?, Employee = ? WHERE CertificateID = ?"); 
+            PreparedStatement query = db.prepareStatement("UPDATE Certificate SET Grade = ?, Employee = ? WHERE CertificateID = ?"); 
             
-            query.setTimestamp(1, Timestamp.valueOf(certificate.getEnrollmenDateTime()));
-            query.setDouble(2, certificate.getGrade());
-            query.setString(3, certificate.getEmployee());
-            query.setString(4, certificate.getCertificateID());
+            query.setDouble(1, certificate.getGrade());
+            query.setString(2, certificate.getEmployee());
+            query.setString(3, certificate.getCertificateID());
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error in updateCertificate");
@@ -113,7 +110,7 @@ public class CertificateDAOimpl implements CertificateDAO{
     
                 if (completedModules == totalModules) {
                     // Issue certificate
-                    String issueCertificateQuery = "INSERT INTO Certificaat (Grade, employee, EnrollmentDate) " +
+                    String issueCertificateQuery = "INSERT INTO Certificaat (Grade, employee) " +
                         "SELECT InschrijfDate, 'PASS', 'System' FROM Inschrijving WHERE EmailAddress = ? AND CourseID = ?;";
                     
                     PreparedStatement issueCertificateStatement = db.prepareStatement(issueCertificateQuery);

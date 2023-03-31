@@ -96,5 +96,26 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
         }
         return completionPercentage;
     }
+
+    @Override
+    public void updateRegistrationWithCertificate(String emailAddress, int courseId, int certificateId) {
+        try(Connection db = dbConnection.getConnection())
+        {
+            String updateRegistrationQuery = "UPDATE Inschrijving SET CertificaatID = ? WHERE EmailAddress = ? AND CourseID = ?";
+            PreparedStatement updateRegistrationStmt = db.prepareStatement(updateRegistrationQuery);
+            updateRegistrationStmt.setInt(1, certificateId);
+            updateRegistrationStmt.setString(2, emailAddress);
+            updateRegistrationStmt.setInt(3, courseId);
+            updateRegistrationStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            System.out.println("error in pdateRegistrationWithCertificate");
+             e.printStackTrace();
+        }
+
+    }
+
+    
 }
 

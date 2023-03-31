@@ -10,4 +10,5 @@ public interface EnrollmentDAO {
     void updateEnrollment(Enrollment enrollment);
     void deleteEnrollment(Enrollment enrollment);
     public double getCompletionPercentageByGender(String gender);
+    public void updateRegistrationWithCertificate(String emailAddress, int courseId, int certificateId);
 }
