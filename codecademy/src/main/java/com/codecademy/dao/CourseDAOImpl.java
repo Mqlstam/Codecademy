@@ -148,7 +148,7 @@ public class CourseDAOImpl implements CourseDAO{
         public int getNumCompletedCourses(String courseName) {
             int numCompleted = 0;
             try (Connection db = dbConnection.getConnection()) {
-                PreparedStatement query = db.prepareStatement("SELECT COUNT(DISTINCT student_email) AS num_completed FROM Enrollment WHERE course_name = ? AND certificate_id IS NOT NULL");
+                PreparedStatement query = db.prepareStatement("SELECT COUNT(DISTINCT StudentEmail) AS num_completed FROM Enrollment WHERE CourseName = ? AND CertificateID IS NOT NULL");
                 query.setString(1, courseName);
                 ResultSet rs = query.executeQuery();
                 if (rs.next()) {
