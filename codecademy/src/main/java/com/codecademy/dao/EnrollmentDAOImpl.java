@@ -20,12 +20,10 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
 
     @Override
     public void addEnrollment(String studentEmail, String courseName) {
-        Timestamp now = new Timestamp(System.currentTimeMillis());
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("INSERT INTO Enrollment VALUES(GETDATE() ,?, ?, ?)");
-            query.setTimestamp(1, now);
-            query.setString(2, studentEmail);
-            query.setString(3, courseName);
+            PreparedStatement query = db.prepareStatement("INSERT INTO Enrollment VALUES(GETDATE() ,?, ?)");
+            query.setString(1, studentEmail);
+            query.setString(2, courseName);
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error in addEnrollment");
@@ -101,7 +99,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
     public void updateRegistrationWithCertificate(String emailAddress, int courseId, int certificateId) {
         try(Connection db = dbConnection.getConnection())
         {
-            String updateRegistrationQuery = "UPDATE Inschrijving SET CertificaatID = ? WHERE EmailAddress = ? AND CourseID = ?";
+            String updateRegistrationQuery = "UPDATE Enrollment SET CertificaatID = ? WHERE StudentEmail = ? AND CourseID = ?";
             PreparedStatement updateRegistrationStmt = db.prepareStatement(updateRegistrationQuery);
             updateRegistrationStmt.setInt(1, certificateId);
             updateRegistrationStmt.setString(2, emailAddress);

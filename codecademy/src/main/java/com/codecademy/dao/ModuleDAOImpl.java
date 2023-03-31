@@ -21,7 +21,7 @@ public void getAverageProgressPerModule(int courseId) {
     try (Connection db = dbConnection.getConnection()) {
     
         // Get the average progress per module for the selected course
-        String averageProgressQuery = "SELECT M.FollowNumber, M.ModuleTitle, AVG(SC.PercentageViewed) AS average_progress " +
+        String averageProgressQuery = "SELECT M.FollowNumber, M.ModuleTitle, AVG(SC.percentage) AS average_progress " +
             "FROM Module M " +
             "JOIN Content C ON M.ContentID = C.ContentID " +
             "JOIN Student_Content SC ON C.ContentID = SC.ContentItemID " +
@@ -52,7 +52,7 @@ public void getAverageProgressPerModule(int courseId) {
 
        try(Connection db = dbConnection.getConnection()) {
            
-        String checkCompletionQuery = "SELECT COUNT(*) AS module_count FROM Module WHERE ContentItemID IN (SELECT ContentItemID FROM CursistContentItem WHERE EmailAddress = ? AND PercentageViewed = 100)";
+        String checkCompletionQuery = "SELECT COUNT(*) AS module_count FROM Module WHERE ContentID IN (SELECT ContentItemID FROM Student_Content WHERE StudentEmail = ? AND percentage = 100)";
         PreparedStatement checkCompletionStmt = db.prepareStatement(checkCompletionQuery);
         checkCompletionStmt.setString(1, emailAddress);
         ResultSet rs = checkCompletionStmt.executeQuery();

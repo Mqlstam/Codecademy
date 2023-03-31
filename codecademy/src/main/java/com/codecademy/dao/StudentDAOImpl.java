@@ -129,7 +129,7 @@ public class StudentDAOImpl implements StudentDAO{
         
 
         // Get the progress per module for the selected account and course
-        String progressQuery = "SELECT M.FollowNumber, M.ModuleTitle, SC.PercentageViewed AS progress " +
+        String progressQuery = "SELECT M.FollowNumber, M.ModuleTitle, SC.percentage AS progress " +
             "FROM Module M " +
             "JOIN Content C ON M.ContentID = C.ContentID " +
             "JOIN Student_Content SC ON C.ContentID = SC.ContentID " +
