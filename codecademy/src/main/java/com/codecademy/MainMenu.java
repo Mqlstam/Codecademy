@@ -26,7 +26,7 @@ public class MainMenu extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        stage.setTitle("Anhtuan Nguyen(2192526), Luuk beks(2192527), Miquel Stam(2192528)");
+        stage.setTitle("Anhtuan Nguyen(2192526), Luuk beks(2192527), Miquel Stam(2192528) ");
         stage.setWidth(800);
         stage.setHeight(600);
         stage.setResizable(false);

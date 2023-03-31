@@ -1,5 +1,8 @@
 package com.codecademy.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Course {
     private String courseName;
     private String courseTopic;
@@ -7,6 +10,7 @@ public class Course {
     private String courseTag;
     private Difficulty difficulty;
     private int moduleId;
+    private List<Module> modules;
 
     public Course(String courseName, int ModuleId, String courseTopic, String courseIntroText, String courseTag, Difficulty difficulty) {
         this.courseName = courseName;
@@ -15,6 +19,7 @@ public class Course {
         CourseIntroText = courseIntroText;
         this.courseTag = courseTag;
         this.difficulty = difficulty;
+        this.modules = new ArrayList<>();
     }
 
     public String getCourseName() {

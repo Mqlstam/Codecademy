@@ -9,4 +9,5 @@ public interface EnrollmentDAO {
     void addEnrollment(String studentEmail, String courseName);
     void updateEnrollment(Enrollment enrollment);
     void deleteEnrollment(Enrollment enrollment);
+    public double getCompletionPercentageByGender(String gender);
 }

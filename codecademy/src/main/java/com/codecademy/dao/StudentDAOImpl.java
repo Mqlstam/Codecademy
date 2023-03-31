@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.codecademy.database.DbConnection;
 import com.codecademy.domain.Student;
@@ -104,4 +106,20 @@ public class StudentDAOImpl implements StudentDAO{
         }
     }
     
+    @Override
+    public List<String> getCertificatesByEmail(String email) {
+        List<String> certificates = new ArrayList<>();
+        try(Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("SELECT Certificate.CertificateID FROM Certificate INNER JOIN Enrollment ON Certificate.CertificateID = Enrollment.CertificateID WHERE Enrollment.StudentEmail = ?");
+            query.setString(1, email);
+            ResultSet rs = query.executeQuery();
+            while (rs.next()) {
+                String certificateName = rs.getString("CertificateID");
+                certificates.add(certificateName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return certificates;
+    }
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import com.codecademy.domain.Enrollment;
 import com.codecademy.database.DbConnection;
@@ -19,10 +20,12 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
 
     @Override
     public void addEnrollment(String studentEmail, String courseName) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("INSERT INTO Enrollment VALUES(GETDATE() ,?, ?, 0)");
-            query.setString(1, studentEmail);
-            query.setString(2, courseName);
+            PreparedStatement query = db.prepareStatement("INSERT INTO Enrollment VALUES(GETDATE() ,?, ?, ?)");
+            query.setTimestamp(1, now);
+            query.setString(2, studentEmail);
+            query.setString(3, courseName);
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error in addEnrollment");
@@ -51,7 +54,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
             ObservableList<Enrollment> list = FXCollections.observableArrayList();
 
             while (result.next()) {                
-                list.add(new Enrollment(result.getString("StudentEmail"), result.getString("CourseName"), result.getTimestamp("EnrollmentDateTime").toLocalDateTime()));
+                list.add(new Enrollment(result.getString("StudentEmail"), result.getString("CourseName"), result.getTimestamp("EnrollmentDatetime").toLocalDateTime()));
             }
             return list;
         } catch (SQLException e) {
@@ -76,5 +79,22 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
         
     }
     
-    
+    @Override 
+    public double getCompletionPercentageByGender(String gender) {
+        double completionPercentage = 0;
+        try(Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("SELECT COUNT(DISTINCT CourseName) AS TotalCourses, COUNT(DISTINCT CertificateID) AS CompletedCourses FROM Enrollment E JOIN Student S ON E.StudentEmail = S.Email JOIN Certificate C ON E.CertificateID = C.CertificateID WHERE S.Gender = ?");
+            query.setString(1, gender);
+            ResultSet rs = query.executeQuery();
+            if(rs.next()) {
+                int totalCourses = rs.getInt("TotalCourses");
+                int completedCourses = rs.getInt("CompletedCourses");
+                completionPercentage = (completedCourses * 1.0 / totalCourses) * 100;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return completionPercentage;
+    }
 }
+

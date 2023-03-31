@@ -1,6 +1,8 @@
 
 package com.codecademy.dao;
 
+import java.util.List;
+
 import com.codecademy.domain.Course;
 import javafx.collections.ObservableList;
 
@@ -10,4 +12,7 @@ public interface CourseDAO {
     void addCourse(Course course);
     void updateCourse(Course course);
     void deleteCourse(Course course);
+    List<String> getTop3CertifiedCourses();
+    public List<String> getRecommendedCourses(String selectedCourse);
+    public int getNumCompletedCourses(String courseName);
 }

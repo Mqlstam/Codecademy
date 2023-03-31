@@ -1,33 +1,94 @@
 package com.codecademy.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+
+import com.codecademy.database.DbConnection;
 import com.codecademy.domain.Certificate;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class CertificateDAOimpl implements CertificateDAO{
 
+
+    private DbConnection dbConnection;
+    private Timestamp timestamp;
+
+    public CertificateDAOimpl(DbConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
+
     @Override
     public ObservableList<Certificate> getCertificates() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCertificates'");
+        try (Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("SELECT * FROM Certificate");
+            ResultSet result = query.executeQuery();
+
+            ObservableList<Certificate> list = FXCollections.observableArrayList();
+
+            while (result.next()) {
+                list.add(new Certificate(result.getString("CertificateID"), result.getDouble("Grade"), result.getString("Employee")));
+            }
+            return list;
+        } catch (Exception e) {
+            System.err.println("Error in getCertificates");
+            e.printStackTrace();
+        }
+        return null;
+        
     }
 
     @Override
     public void addCertificate(Certificate certificate) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addCertificate'");
+        try (Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("INSERT INTO Certificate VALUES(?, ?, ?, ?)");
+            query.setString(1, certificate.getCertificateID());
+            query.setDouble(2, certificate.getGrade());
+            query.setString(3, certificate.getEmployee());
+            query.setTimestamp(4, timestamp.valueOf(certificate.getEnrollmenDateTime()));
+            query.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error in addCertificate");
+            e.printStackTrace();
+        }
+       
     }
 
     @Override
     public void updateCertificate(Certificate certificate) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateCertificate'");
+        try(Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("UPDATE Certificate SET Enrollmentdate = ?, Grade = ?, Employee = ? WHERE CertificateID = ?"); 
+            
+            query.setTimestamp(1, Timestamp.valueOf(certificate.getEnrollmenDateTime()));
+            query.setDouble(2, certificate.getGrade());
+            query.setString(3, certificate.getEmployee());
+            query.setString(4, certificate.getCertificateID());
+            query.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error in updateCertificate");
+            e.printStackTrace(); 
+        }
+
     }
 
     @Override
     public void deleteCertificate(Certificate certificate) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteCertificate'");
+        try(Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("DELETE FROM Certificate WHERE CertificateID = ?");
+            query.setString(1, certificate.getCertificateID());
+            query.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error in deleteCertificate");
+            e.printStackTrace();
+        }
     }
     
 }

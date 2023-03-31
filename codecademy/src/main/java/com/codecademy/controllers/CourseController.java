@@ -98,6 +98,7 @@ public class CourseController {
         addCourse.setOnAction(e -> {
             AddCourseController.display();
             stage.close();
+            
         });
 
         edit.setOnAction(e -> {

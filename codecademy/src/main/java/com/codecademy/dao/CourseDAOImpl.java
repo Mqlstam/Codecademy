@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.codecademy.domain.Course;
 import com.codecademy.domain.Difficulty;
@@ -29,14 +31,14 @@ public class CourseDAOImpl implements CourseDAO{
 
             while (result.next()) {
                 Difficulty difficulty;
-                if (result.getString("CourseDifficulty") == "Beginner" || result.getString("CourseDifficulty") == "BEGINNER") {
+                if (result.getString("Difficulty") == "Beginner" || result.getString("Difficulty") == "BEGINNER") {
                     difficulty = Difficulty.BEGINNER;
-                } else if (result.getString("CourseDifficulty") == "Intermediate" || result.getString("CourseDifficulty") == "INTERMEDIATE") {
+                } else if (result.getString("Difficulty") == "Intermediate" || result.getString("Difficulty") == "INTERMEDIATE") {
                     difficulty = Difficulty.ADVANCED;
                 } else {
                     difficulty = Difficulty.EXPERT;
                 }
-                list.add(new Course(result.getString("CourseName"), result.getInt("ModuleId"), result.getString("CourseTopic"), result.getString("CourseIntroText"), result.getString("CourseTag"), difficulty));
+                list.add(new Course(result.getString("CourseName"), result.getInt("ModuleNumber"), result.getString("CourseTopic"), result.getString("CourseIntroText"), result.getString("CourseTag"), difficulty));
             }
             return list;
         } catch (SQLException e) {
@@ -94,7 +96,7 @@ public class CourseDAOImpl implements CourseDAO{
     @Override
     public void deleteCourse(Course course) {
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("UPDATE Course SET ModuleId = ?, CourseTopic = ?, CourseIntroText = ?, CourseTag = ?, CourseDifficulty = ? WHERE CourseName = ?"); 
+            PreparedStatement query = db.prepareStatement("UPDATE Course SET ModuleNumber = ?, CourseTopic = ?, CourseIntroText = ?, CourseTag = ?, Difficulty = ? WHERE CourseName = ?"); 
             query.setInt(1, course.getModuleId());
             query.setString(2, course.getCourseTopic());
             query.setString(3, course.getCourseIntroText());
@@ -107,5 +109,56 @@ public class CourseDAOImpl implements CourseDAO{
             e.printStackTrace(); 
         } }
 
-    
+        @Override
+        public List<String> getTop3CertifiedCourses() {
+            List<String> courses = new ArrayList<>();
+            try(Connection db = dbConnection.getConnection()) {
+                PreparedStatement query = db.prepareStatement("SELECT TOP 3 CourseName FROM (SELECT CourseName, COUNT(*) as numCertificates FROM Enrollment WHERE CertificateID IS NOT NULL GROUP BY CourseName) AS counts ORDER BY numCertificates DESC");
+                ResultSet rs = query.executeQuery();
+                while (rs.next()) {
+                    String courseName = rs.getString("CourseName");
+                    courses.add(courseName);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return courses;
+        }
+
+
+        @Override
+        public List<String> getRecommendedCourses(String selectedCourse) {
+            List<String> recommendedCourses = new ArrayList<>();
+            try (Connection conn = dbConnection.getConnection()) {
+                String query = "SELECT RecommendedCourseName FROM CourseReccomendation WHERE CourseName = ?";
+                PreparedStatement statement = conn.prepareStatement(query);
+                statement.setString(1, selectedCourse);
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    String recommendedCourse = rs.getString("RecommendedCourseName");
+                    recommendedCourses.add(recommendedCourse);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return recommendedCourses;
+        }
+
+        @Override
+        public int getNumCompletedCourses(String courseName) {
+            int numCompleted = 0;
+            try (Connection db = dbConnection.getConnection()) {
+                PreparedStatement query = db.prepareStatement("SELECT COUNT(DISTINCT student_email) AS num_completed FROM Enrollment WHERE course_name = ? AND certificate_id IS NOT NULL");
+                query.setString(1, courseName);
+                ResultSet rs = query.executeQuery();
+                if (rs.next()) {
+                    numCompleted = rs.getInt("num_completed");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return numCompleted;
+        }
+        
+        
 }
