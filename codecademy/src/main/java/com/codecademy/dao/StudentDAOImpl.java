@@ -122,4 +122,38 @@ public class StudentDAOImpl implements StudentDAO{
         }
         return certificates;
     }
+
+    @Override
+    public void getProgressPerModuleForAccount(String emailAddress, int courseId) {
+    try (Connection db = dbConnection.getConnection()) {
+        
+
+        // Get the progress per module for the selected account and course
+        String progressQuery = "SELECT M.FollowNumber, M.ModuleTitle, SC.PercentageViewed AS progress " +
+            "FROM Module M " +
+            "JOIN Content C ON M.ContentID = C.ContentID " +
+            "JOIN Student_Content SC ON C.ContentID = SC.ContentID " +
+            "WHERE C.ContentID IN (SELECT ContentItemID FROM Course WHERE CourseID = ?) " +
+            "AND SC.StudentEmail = ? " +
+            "ORDER BY M.FollowNumber;";
+
+        PreparedStatement progressStatement = db.prepareStatement(progressQuery);
+        progressStatement.setInt(1, courseId);
+        progressStatement.setString(2, emailAddress);
+
+        ResultSet resultSet = progressStatement.executeQuery();
+
+        System.out.println("Progress per module for account " + emailAddress + " and course ID " + courseId + ":");
+        while (resultSet.next()) {
+            int moduleId = resultSet.getInt("FollowNumber");
+            String title = resultSet.getString("ModuleTitle");
+            int progress = resultSet.getInt("progress");
+
+            System.out.println("Module ID: " + moduleId + ", Title: " + title + ", Progress: " + progress + "%");
+        }
+    } catch (SQLException e) {
+        System.out.println("Error while getting the progress per module for account: " + e.getMessage());
+    }
+}
+
 }
