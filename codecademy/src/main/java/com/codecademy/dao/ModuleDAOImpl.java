@@ -27,12 +27,13 @@ public void getAverageProgressPerModule(int courseId) {
     
         // Get the average progress per module for the selected course
         String averageProgressQuery = "SELECT M.FollowNumber, M.ModuleTitle, AVG(SC.percentage) AS average_progress " +
-            "FROM Module M " +
-            "JOIN Content C ON M.ContentID = C.ContentID " +
-            "JOIN Student_Content SC ON C.ContentID = SC.ContentItemID " +
-            "WHERE C.ContentID IN (SELECT ContentItemID FROM Course WHERE CourseID = ?) " +
-            "GROUP BY M.FollowNumber, M.ModuleTitle " +
-            "ORDER BY M.FollowNumber;";
+                                    "FROM Module M " +
+                                    "JOIN Course cs ON cs.CourseName = M.CourseName " +
+                                    "JOIN Content C ON M.ContentID = C.ContentID " +
+                                    "JOIN Student_Content SC ON C.ContentID = SC.ContentID " +
+                                    "WHERE cs.CourseName = ? " +
+                                    "GROUP BY M.FollowNumber, M.ModuleTitle " +
+                                    "ORDER BY M.FollowNumber;"; 
 
         PreparedStatement averageProgressStatement = db.prepareStatement(averageProgressQuery);
         averageProgressStatement.setInt(1, courseId);
@@ -57,7 +58,7 @@ public void getAverageProgressPerModule(int courseId) {
 
        try(Connection db = dbConnection.getConnection()) {
            
-        String checkCompletionQuery = "SELECT COUNT(*) AS module_count FROM Module WHERE ContentID IN (SELECT ContentItemID FROM Student_Content WHERE StudentEmail = ? AND percentage = 100)";
+        String checkCompletionQuery = "SELECT COUNT(*) AS module_count FROM Module WHERE ContentID IN (SELECT ContentID FROM Student_Content WHERE StudentEmail = ? AND percentage = 100)";
         PreparedStatement checkCompletionStmt = db.prepareStatement(checkCompletionQuery);
         checkCompletionStmt.setString(1, emailAddress);
         ResultSet rs = checkCompletionStmt.executeQuery();
