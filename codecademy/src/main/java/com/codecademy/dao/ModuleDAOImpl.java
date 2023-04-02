@@ -16,6 +16,11 @@ public class ModuleDAOImpl implements ModuleDAO {
   
     private DbConnection dbConnection;
 
+    public ModuleDAOImpl(DbConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
+
+
     @Override
 public void getAverageProgressPerModule(int courseId) {
     try (Connection db = dbConnection.getConnection()) {
