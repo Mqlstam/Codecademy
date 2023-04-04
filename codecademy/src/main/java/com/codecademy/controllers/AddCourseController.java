@@ -77,7 +77,7 @@ public class AddCourseController{
         Button back = new Button("Back");
         Button save = new Button("Save");
         save.setOnAction(e -> {
-            courseDAO.addCourse(new Course(courseName.getText(), moduleId, courseTopic.getText(), courseIntroText.getText(), courseTag.getText(), Difficulty.valueOf(courseDifficulty.toUpperCase())));
+            courseDAO.addCourse(new Course(courseName.getText(), courseTopic.getText(), courseIntroText.getText(), courseTag.getText(), Difficulty.valueOf(courseDifficulty.toUpperCase())));
             stage.close();
             CourseController.display();
         });

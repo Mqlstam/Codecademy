@@ -9,17 +9,13 @@ public class Course {
     private String CourseIntroText;
     private String courseTag;
     private Difficulty difficulty;
-    private int moduleId;
-    private List<Module> modules;
 
-    public Course(String courseName, int ModuleId, String courseTopic, String courseIntroText, String courseTag, Difficulty difficulty) {
+    public Course(String courseName, String courseTopic, String courseIntroText, String courseTag, Difficulty difficulty) {
         this.courseName = courseName;
-        this.moduleId = ModuleId;
         this.courseTopic = courseTopic;
-        CourseIntroText = courseIntroText;
+        this.CourseIntroText = courseIntroText;
         this.courseTag = courseTag;
         this.difficulty = difficulty;
-        this.modules = new ArrayList<>();
     }
 
     public String getCourseName() {
@@ -60,10 +56,6 @@ public class Course {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
-    }
-
-    public int getModuleId() {
-        return moduleId;
     }
 
     

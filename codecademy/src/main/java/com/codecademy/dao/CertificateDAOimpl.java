@@ -96,7 +96,7 @@ public class CertificateDAOimpl implements CertificateDAO{
             // Check if all modules are completed
             String checkCompletionQuery = "SELECT COUNT(*) AS total_modules, " +
                 "(SELECT COUNT(*) FROM Student_Content WHERE StudentEmail = ? AND percentage = 100) AS completed_modules " +
-                "FROM Module WHERE ContentID IN (SELECT ContentID FROM Course WHERE CourseID = ?);";
+                "FROM Module WHERE ContentID IN (SELECT ContentID FROM Course WHERE CourseName = ?);";
             
             PreparedStatement checkCompletionStatement = db.prepareStatement(checkCompletionQuery);
             checkCompletionStatement.setString(1, emailAddress);
@@ -110,8 +110,8 @@ public class CertificateDAOimpl implements CertificateDAO{
     
                 if (completedModules == totalModules) {
                     // Issue certificate
-                    String issueCertificateQuery = "INSERT INTO Certificaat (Grade, employee) " +
-                        "SELECT InschrijfDate, 'PASS', 'System' FROM Inschrijving WHERE EmailAddress = ? AND CourseID = ?;";
+                    String issueCertificateQuery = "INSERT INTO Certificate (Grade, employee) " +
+                        "SELECT InschrijfDate, 'PASS', 'System' FROM Enrollment WHERE StudentEmail = ? AND CourseName = ?;";
                     
                     PreparedStatement issueCertificateStatement = db.prepareStatement(issueCertificateQuery);
                     issueCertificateStatement.setString(1, emailAddress);

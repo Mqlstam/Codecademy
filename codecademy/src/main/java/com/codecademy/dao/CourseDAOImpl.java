@@ -38,7 +38,7 @@ public class CourseDAOImpl implements CourseDAO{
                 } else {
                     difficulty = Difficulty.EXPERT;
                 }
-                list.add(new Course(result.getString("CourseName"), result.getInt("ModuleNumber"), result.getString("CourseTopic"), result.getString("CourseIntroText"), result.getString("CourseTag"), difficulty));
+                list.add(new Course(result.getString("CourseName"), result.getString("CourseTopic"), result.getString("CourseIntroText"), result.getString("CourseTag"), difficulty));
             }
             return list;
         } catch (SQLException e) {
@@ -70,11 +70,10 @@ public class CourseDAOImpl implements CourseDAO{
         try(Connection db = dbConnection.getConnection()) {
             PreparedStatement query = db.prepareStatement("INSERT INTO Course VALUES(?, ?, ?, ?, ?, ?)");
             query.setString(1, course.getCourseName());
-            query.setInt(2, course.getModuleId());
-            query.setString(3, course.getCourseTopic());
-            query.setString(4, course.getCourseIntroText());
-            query.setString(5, course.getCourseTag());
-            query.setString(6, course.getDifficulty().toString());
+            query.setString(2, course.getCourseTopic());
+            query.setString(3, course.getCourseIntroText());
+            query.setString(4, course.getCourseTag());
+            query.setString(5, course.getDifficulty().toString());
             query.executeUpdate();
             System.out.println("Course added");
         } catch (SQLException e) {
@@ -97,7 +96,6 @@ public class CourseDAOImpl implements CourseDAO{
     public void deleteCourse(Course course) {
         try(Connection db = dbConnection.getConnection()) {
             PreparedStatement query = db.prepareStatement("UPDATE Course SET ModuleNumber = ?, CourseTopic = ?, CourseIntroText = ?, CourseTag = ?, Difficulty = ? WHERE CourseName = ?"); 
-            query.setInt(1, course.getModuleId());
             query.setString(2, course.getCourseTopic());
             query.setString(3, course.getCourseIntroText());
             query.setString(4, course.getCourseTag());
@@ -130,7 +128,7 @@ public class CourseDAOImpl implements CourseDAO{
         public List<String> getRecommendedCourses(String selectedCourse) {
             List<String> recommendedCourses = new ArrayList<>();
             try (Connection conn = dbConnection.getConnection()) {
-                String query = "SELECT RecommendedCourseName FROM CourseReccomendation WHERE CourseName = ?";
+                String query = "SELECT RecommendedCourseName FROM CourseRecommendation1 WHERE CourseName = ?";
                 PreparedStatement statement = conn.prepareStatement(query);
                 statement.setString(1, selectedCourse);
                 ResultSet rs = statement.executeQuery();

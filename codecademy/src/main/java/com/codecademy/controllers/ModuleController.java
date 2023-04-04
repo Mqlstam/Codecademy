@@ -25,8 +25,7 @@ public class ModuleController {
         stage.setWidth(1000);
         stage.setHeight(800);
         stage.setResizable(false);
-
-        
+ 
         FlowPane root = new FlowPane();
         TableView table = new TableView();
         Label moduleOverview = new Label("Module overview");

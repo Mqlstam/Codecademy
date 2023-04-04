@@ -77,7 +77,7 @@ public class EditCourseController {
         Button back = new Button("Back");
         Button save = new Button("Save");
         save.setOnAction(e -> {
-            courseDAO.updateCourse(new Course(courseName.getText(), moduleId, courseTopic.getText(), courseIntroText.getText(), courseTag.getText(), Difficulty.valueOf(courseDifficulty.toUpperCase())));
+            courseDAO.updateCourse(new Course(courseName.getText(), courseTopic.getText(), courseIntroText.getText(), courseTag.getText(), Difficulty.valueOf(courseDifficulty.toUpperCase())));
             stage.close();
             CourseController.display();
         });

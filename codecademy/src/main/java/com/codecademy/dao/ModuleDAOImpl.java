@@ -26,14 +26,14 @@ public void getAverageProgressPerModule(int courseId) {
     try (Connection db = dbConnection.getConnection()) {
     
         // Get the average progress per module for the selected course
-        String averageProgressQuery = "SELECT M.FollowNumber, M.ModuleTitle, AVG(SC.percentage) AS average_progress " +
-                                    "FROM Module M " +
-                                    "JOIN Course cs ON cs.CourseName = M.CourseName " +
-                                    "JOIN Content C ON M.ContentID = C.ContentID " +
-                                    "JOIN Student_Content SC ON C.ContentID = SC.ContentID " +
-                                    "WHERE cs.CourseName = ? " +
-                                    "GROUP BY M.FollowNumber, M.ModuleTitle " +
-                                    "ORDER BY M.FollowNumber;"; 
+            String averageProgressQuery = "SELECT M.FollowNumber, M.ModuleTitle, AVG(SC.percentage) AS average_progress " +
+                                        "FROM Module M " +
+                                        "JOIN Course cs ON cs.CourseName = M.CourseName " +
+                                        "JOIN Content C ON M.ContentID = C.ContentID " +
+                                        "JOIN Student_Content SC ON C.ContentID = SC.ContentID " +
+                                        "WHERE cs.CourseName = ? " +
+                                        "GROUP BY M.FollowNumber, M.ModuleTitle " +
+                                        "ORDER BY M.FollowNumber;"; 
 
         PreparedStatement averageProgressStatement = db.prepareStatement(averageProgressQuery);
         averageProgressStatement.setInt(1, courseId);

@@ -11,6 +11,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import com.codecademy.controllers.CourseController;
 import com.codecademy.controllers.EnrollmentController;
@@ -57,7 +58,9 @@ public class MainMenu extends Application {
         root.setAlignment(Pos.CENTER);
         root.getChildren().add(vBox);
         Scene scene = new Scene(root);
-        
+        scene.getStylesheets().add(Paths.get("resources/com/codecademy/Styles.css").toUri().toString());
+
+
         student.setOnAction(e -> {
            StudentController.display(); 
            stage.close();
@@ -119,6 +122,10 @@ public class MainMenu extends Application {
         root.setAlignment(Pos.CENTER);
         root.getChildren().add(vBox);
         Scene scene = new Scene(root);
+        //get the css file
+    
+        scene.getStylesheets().add(Paths.get("resources/com/codecademy/Styles.css").toUri().toString());
+
         
         student.setOnAction(e -> {
            StudentController.display(); 

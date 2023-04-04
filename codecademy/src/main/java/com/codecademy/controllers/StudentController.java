@@ -43,34 +43,24 @@ public class StudentController {
         Label studentOverview = new Label("Student overview");
         studentOverview.setFont(Font.font("Arial", FontWeight.BOLD, 30));
 
-        // DbConnection db = new DbConnection();
-        // ObservableList list = db.getStudents();
-
         StudentDAO studentDAO = new StudentDAOImpl(new DbConnection());
         ObservableList list = studentDAO.getStudents();
         TableView<Student> table = new TableView<>();
         table.setItems(list);
         TableColumn<Student, String> emailCol = new TableColumn<>("email");
-        emailCol.setCellValueFactory(new PropertyValueFactory<Student,
-        String>("email"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<Student,String>("email"));
         TableColumn<Student, String> nameCol = new TableColumn<>("name");
-        nameCol.setCellValueFactory(new PropertyValueFactory<Student,
-        String>("name"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<Student,String>("name"));
         TableColumn<Student, LocalDate> birthdayCol = new TableColumn<>("birthday");
-        birthdayCol.setCellValueFactory(new PropertyValueFactory<Student,
-        LocalDate>("birthDate"));
+        birthdayCol.setCellValueFactory(new PropertyValueFactory<Student,LocalDate>("birthDate"));
         TableColumn<Student, String> genderCol = new TableColumn<>("gender");
-        genderCol.setCellValueFactory(new PropertyValueFactory<Student,
-        String>("gender"));
+        genderCol.setCellValueFactory(new PropertyValueFactory<Student,String>("gender"));
         TableColumn<Student, String> adressCol = new TableColumn<>("adress");
-        adressCol.setCellValueFactory(new PropertyValueFactory<Student,
-        String>("adress"));
+        adressCol.setCellValueFactory(new PropertyValueFactory<Student,String>("adress"));
         TableColumn<Student, String> countryCol = new TableColumn<>("Country");
-        countryCol.setCellValueFactory(new PropertyValueFactory<Student,
-        String>("country"));
+        countryCol.setCellValueFactory(new PropertyValueFactory<Student, String>("country"));
         TableColumn<Student, String> cityCol = new TableColumn<>("City");
-        cityCol.setCellValueFactory(new PropertyValueFactory<Student,
-        String>("city"));
+        cityCol.setCellValueFactory(new PropertyValueFactory<Student,String>("city"));
         table.getColumns().addAll(emailCol, nameCol, birthdayCol, genderCol, adressCol, countryCol, cityCol);
 
 
