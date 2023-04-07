@@ -14,9 +14,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.BorderPane;
@@ -46,11 +48,10 @@ public class CourseController {
         ObservableList list = courseDAO.getCourses();
 
         TableView<Course> table = new TableView<>();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.setItems(list);
         TableColumn<Course, String> courseName = new TableColumn<>("Course Name");
         courseName.setCellValueFactory(new PropertyValueFactory<Course, String>("CourseName"));
-        TableColumn<Course, String> moduleId = new TableColumn<>("Module Id");
-        moduleId.setCellValueFactory(new PropertyValueFactory<Course, String>("ModuleId"));
         TableColumn<Course, String> courseTopic = new TableColumn<>("Course Topic");
         courseTopic.setCellValueFactory(new PropertyValueFactory<Course, String>("CourseTopic"));
         TableColumn<Course, String> courseIntroText = new TableColumn<>("Course Intro Text");
@@ -60,8 +61,8 @@ public class CourseController {
 
         TableColumn<Course, String> courseDifficulty = new TableColumn<>("Course Difficulty");
         courseDifficulty.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDifficulty().toString()));
-    
-        table.getColumns().addAll(courseName, moduleId,  courseTopic, courseIntroText, courseTag, courseDifficulty);
+        table.setPrefWidth(700);
+        table.getColumns().addAll(courseName, courseTopic, courseIntroText, courseTag, courseDifficulty);
 
         Button addCourse = new Button("Add");
         Button edit = new Button("Edit");
@@ -114,17 +115,31 @@ public class CourseController {
 
         delete.setOnAction(e -> {
             Course course = table.getSelectionModel().getSelectedItem();
-            if (course == null) {
-                return;
+            if (course != null) {
+                courseDAO.deleteCourse(course); // remove student from the ObservableList
+                stage.close();
+                display(); // refresh the TableView to reflect the changes            
+            } else {
+                System.out.println("No course selected");
             }
-            courseDAO.deleteCourse(course);
-            display();
-            stage.close();
         });
+
+      
 
         back.setOnAction(e -> {
             MainMenu.display();
             stage.close();
+        });
+
+        table.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                Course selectedCourse = table.getSelectionModel().getSelectedItem();
+                if (selectedCourse != null) {
+                    CourseStatistics selectedCourseStatistics = new CourseStatistics(selectedCourse);
+                    CourseStatistics.display();
+                    stage.close();
+                }
+            }
         });
 
         stage.setScene(scene);

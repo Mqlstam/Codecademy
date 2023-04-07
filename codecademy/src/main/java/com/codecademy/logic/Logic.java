@@ -38,17 +38,7 @@ public class Logic {
         // return outcome determined whether email matches the regex key
         return mailAddress.matches(regex);
     }
-    public boolean numericRangeTools(int percentage)
-    {
-        if(percentage>=0 && percentage<=100)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+
     public static String postalCode(String postalCode)
     {
         if(postalCode == null)
@@ -71,6 +61,10 @@ public class Logic {
             throw new IllegalArgumentException();
     }
     
+}
+
+public boolean isValidGrade(Double grade) {
+    return grade >= 1 && grade <= 10;
 }
 }
 

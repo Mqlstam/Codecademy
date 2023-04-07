@@ -11,6 +11,6 @@ public interface StudentDAO {
     void addStudent(Student student);
     void updateStudent(Student student);
     void deleteStudent(Student student);
-    List<String> getCertificatesByEmail(String email);
-    public void getProgressPerModuleForAccount(String emailAddress, int courseId);
+    List<String> getCertificatesByEmail(String string);
+    public void getProgressPerModuleForAccount(String emailAddress, String courseName);
 }

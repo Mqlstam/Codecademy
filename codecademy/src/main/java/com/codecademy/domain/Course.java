@@ -58,5 +58,9 @@ public class Course {
         this.difficulty = difficulty;
     }
 
+    @Override
+    public String toString() {
+        return courseName;
+    }
     
 }

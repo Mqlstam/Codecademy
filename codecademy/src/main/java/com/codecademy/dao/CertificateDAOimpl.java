@@ -32,7 +32,7 @@ public class CertificateDAOimpl implements CertificateDAO{
             ObservableList<Certificate> list = FXCollections.observableArrayList();
 
             while (result.next()) {
-                list.add(new Certificate(result.getString("CertificateID"), result.getDouble("Grade"), result.getString("Employee")));
+                list.add(new Certificate(result.getInt("CertificateID"), result.getDouble("Grade"), result.getString("Employee")));
             }
             return list;
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class CertificateDAOimpl implements CertificateDAO{
             
             query.setDouble(1, certificate.getGrade());
             query.setString(2, certificate.getEmployee());
-            query.setString(3, certificate.getCertificateID());
+            query.setInt(3, certificate.getCertificateID());
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error in updateCertificate");
@@ -80,7 +80,7 @@ public class CertificateDAOimpl implements CertificateDAO{
 
         try(Connection db = dbConnection.getConnection()) {
             PreparedStatement query = db.prepareStatement("DELETE FROM Certificate WHERE CertificateID = ?");
-            query.setString(1, certificate.getCertificateID());
+            query.setInt(1, certificate.getCertificateID());
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error in deleteCertificate");
@@ -88,44 +88,44 @@ public class CertificateDAOimpl implements CertificateDAO{
         }
     }
     
-    @Override
-    public void issueCertificateIfCompleted(String emailAddress, int courseId) {
-        try (Connection db = dbConnection.getConnection()) {
+    // @Override
+    // public void issueCertificateIfCompleted(String emailAddress, int courseId) {
+    //     try (Connection db = dbConnection.getConnection()) {
            
     
-            // Check if all modules are completed
-            String checkCompletionQuery = "SELECT COUNT(*) AS total_modules, " +
-                "(SELECT COUNT(*) FROM Student_Content WHERE StudentEmail = ? AND percentage = 100) AS completed_modules " +
-                "FROM Module WHERE ContentID IN (SELECT ContentID FROM Course WHERE CourseName = ?);";
+    //         // Check if all modules are completed
+    //         String checkCompletionQuery = "SELECT COUNT(*) AS total_modules, " +
+    //             "(SELECT COUNT(*) FROM Student_Content WHERE StudentEmail = ? AND percentage = 100) AS completed_modules " +
+    //             "FROM Module WHERE ContentID IN (SELECT ContentID FROM Course WHERE CourseName = ?);";
             
-            PreparedStatement checkCompletionStatement = db.prepareStatement(checkCompletionQuery);
-            checkCompletionStatement.setString(1, emailAddress);
-            checkCompletionStatement.setInt(2, courseId);
+    //         PreparedStatement checkCompletionStatement = db.prepareStatement(checkCompletionQuery);
+    //         checkCompletionStatement.setString(1, emailAddress);
+    //         checkCompletionStatement.setInt(2, courseId);
             
-            ResultSet resultSet = checkCompletionStatement.executeQuery();
+    //         ResultSet resultSet = checkCompletionStatement.executeQuery();
             
-            if (resultSet.next()) {
-                int totalModules = resultSet.getInt("total_modules");
-                int completedModules = resultSet.getInt("completed_modules");
+    //         if (resultSet.next()) {
+    //             int totalModules = resultSet.getInt("total_modules");
+    //             int completedModules = resultSet.getInt("completed_modules");
     
-                if (completedModules == totalModules) {
-                    // Issue certificate
-                    String issueCertificateQuery = "INSERT INTO Certificate (Grade, employee) " +
-                        "SELECT InschrijfDate, 'PASS', 'System' FROM Enrollment WHERE StudentEmail = ? AND CourseName = ?;";
+    //             if (completedModules == totalModules) {
+    //                 // Issue certificate
+    //                 String issueCertificateQuery = "INSERT INTO Certificate (Grade, employee) " +
+    //                     "SELECT InschrijfDate, 'PASS', 'System' FROM Enrollment WHERE StudentEmail = ? AND CourseName = ?;";
                     
-                    PreparedStatement issueCertificateStatement = db.prepareStatement(issueCertificateQuery);
-                    issueCertificateStatement.setString(1, emailAddress);
-                    issueCertificateStatement.setInt(2, courseId);
-                    issueCertificateStatement.executeUpdate();
+    //                 PreparedStatement issueCertificateStatement = db.prepareStatement(issueCertificateQuery);
+    //                 issueCertificateStatement.setString(1, emailAddress);
+    //                 issueCertificateStatement.setInt(2, courseId);
+    //                 issueCertificateStatement.executeUpdate();
     
-                    System.out.println("Certificate issued for student with email: " + emailAddress);
-                } else {
-                    System.out.println("Student with email " + emailAddress + " has not completed all modules.");
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error while issuing the certificate: " + e.getMessage());
-        }
-    }
+    //                 System.out.println("Certificate issued for student with email: " + emailAddress);
+    //             } else {
+    //                 System.out.println("Student with email " + emailAddress + " has not completed all modules.");
+    //             }
+    //         }
+    //     } catch (SQLException e) {
+    //         System.out.println("Error while issuing the certificate: " + e.getMessage());
+    //     }
+    // }
     
 }

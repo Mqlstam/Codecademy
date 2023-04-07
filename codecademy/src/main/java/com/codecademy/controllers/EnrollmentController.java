@@ -53,6 +53,9 @@ public class EnrollmentController {
         ObservableList list = enrollmentDAO.getEnrollments();
 
         TableView<Enrollment> table = new TableView<>();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setPrefWidth(600);
+
 
         table.setItems(list);
         TableColumn<Enrollment, String> studentEmail = new TableColumn<>("StudentEmail");
@@ -60,6 +63,7 @@ public class EnrollmentController {
         TableColumn<Enrollment, String> courseName = new TableColumn<>("CourseName");
         courseName.setCellValueFactory(new PropertyValueFactory<Enrollment, String>("CourseName"));
         TableColumn<Enrollment, LocalDateTime> dateTime = new TableColumn<>("DateTime");
+        TableColumn<Enrollment, Integer> id = new TableColumn<>("Certificate ID");
         dateTime.setCellValueFactory(new PropertyValueFactory<Enrollment, LocalDateTime>("EnrollmentDateTime"));
         dateTime.setCellFactory(column -> {
             return new TableCell<Enrollment, LocalDateTime>() {
@@ -74,10 +78,8 @@ public class EnrollmentController {
                 }
             };
         });
-        TableColumn<Enrollment, String> progress = new TableColumn<>("Progress");
-        progress.setCellValueFactory(new PropertyValueFactory<Enrollment, String>("Progress"));
 
-        table.getColumns().addAll(studentEmail, courseName, dateTime, progress);
+        table.getColumns().addAll(studentEmail, courseName, dateTime, id);
 
         Button add = new Button("Add");
         Button edit = new Button("Edit");

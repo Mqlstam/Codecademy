@@ -3,10 +3,12 @@ package com.codecademy.dao;
 import java.util.List;
 
 import com.codecademy.domain.Module;
+import com.codecademy.domain.ModuleProgress;
+
 import javafx.collections.ObservableList;
 
 public interface ModuleDAO {
-    public void getAverageProgressPerModule(int courseId);
-    public boolean hasCompletedAllModules(String emailAddress, int courseId);
-    
+    ObservableList<Module> getAllModules();
+    public List<Module> getAverageProgressPerModule(String courseName, String studentEmail);
+    public List<ModuleProgress> getAverageProgressPerModuleAllStudents(String courseName);
 }

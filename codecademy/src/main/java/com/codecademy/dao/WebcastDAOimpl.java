@@ -9,9 +9,13 @@ import java.util.List;
 
 import com.codecademy.database.DbConnection;
 
-public class WebcastDAOimpl implements WebcastDAO{
+public class WebcastDAOImpl implements WebcastDAO{
 
     private DbConnection dbConnection;
+
+    public WebcastDAOImpl(DbConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
 
     @Override
     public List<String> getTop3ViewedWebcasts() {
@@ -22,15 +26,16 @@ public class WebcastDAOimpl implements WebcastDAO{
                     "SELECT TOP 3 w.WebcastTitle, COUNT(*) as Views " +
                     "FROM Student_Content sc " +
                     "JOIN Webcast w ON sc.ContentID = w.ContentID " +
-                    "GROUP BY w.WebcastTitle" +
+                    "GROUP BY w.WebcastTitle " +
                     "ORDER BY Views DESC");
     
             ResultSet rs = query.executeQuery();
     
             while (rs.next()) {
-                String webcastTitle = rs.getString("Title");
+                String webcastTitle = rs.getString("WebcastTitle");
                 int views = rs.getInt("Views");
-                top3Webcasts.add(webcastTitle + " (" + views + " views)");
+                String result = webcastTitle + " (" + views + " views)";
+                top3Webcasts.add(result);
             }
         } catch (SQLException e) {
             e.printStackTrace();

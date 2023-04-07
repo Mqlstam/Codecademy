@@ -4,21 +4,25 @@ import java.time.LocalDateTime;
 
 public class Certificate{
 
-private String certificateID;
+private int certificateID;
 private double grade;
 private String employee;
-private LocalDateTime enrollmenDateTime;
 
 
 
 
-public Certificate(String certificateID, double grade, String employee) {
+    public Certificate(int certificateID, double grade, String employee) {
         this.certificateID = certificateID;
         this.grade = grade;
         this.employee = employee;
     }
+
+    public Certificate(double grade, String employee) {
+        this.grade = grade;
+        this.employee = employee;
+    }
     
-    public String getCertificateID() {
+    public int getCertificateID() {
         return certificateID;
     }
     
@@ -37,12 +41,5 @@ public Certificate(String certificateID, double grade, String employee) {
     public void setEmployee(String employee) {
         this.employee = employee;
     }
-    
-    public LocalDateTime getEnrollmenDateTime() {
-        return enrollmenDateTime;
-    }
-    
-    public void setEnrollmenDateTime(LocalDateTime enrollmenDateTime) {
-        this.enrollmenDateTime = enrollmenDateTime;
-    }
+
 }

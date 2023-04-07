@@ -38,22 +38,20 @@ public class EditCourseController {
 
         FlowPane root = new FlowPane();
         
-
         Scene scene = new Scene(root);
         Label courseLabel = new Label("Course");
         courseLabel.setFont(Font.font("Arial", FontWeight.BOLD, 30));
         
-
         TextField courseName = new TextField();
         courseName.setText(course.getCourseName());
         courseName.setEditable(false);
         ChoiceBox<String> ModuleId = new ChoiceBox<>();
-        ObservableList<String> ModuleIdList = moduleDAO.getModuleIds();
+        // ObservableList<String> ModuleIdList = moduleDAO.getModuleIds();
         ModuleId.getItems().addAll(ModuleIdList);
         ModuleId.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue) -> {
             moduleId = Integer.parseInt(newValue);
         });
-        ModuleId.setValue(String.valueOf(course.getModuleId()));
+        // ModuleId.setValue(String.valueOf(course.getModuleId()));
         
         TextField courseTopic = new TextField();
         courseTopic.setText(course.getCourseTopic());

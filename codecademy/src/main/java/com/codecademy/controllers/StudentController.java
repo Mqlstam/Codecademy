@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
@@ -46,6 +47,7 @@ public class StudentController {
         StudentDAO studentDAO = new StudentDAOImpl(new DbConnection());
         ObservableList list = studentDAO.getStudents();
         TableView<Student> table = new TableView<>();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.setItems(list);
         TableColumn<Student, String> emailCol = new TableColumn<>("email");
         emailCol.setCellValueFactory(new PropertyValueFactory<Student,String>("email"));
@@ -62,6 +64,7 @@ public class StudentController {
         TableColumn<Student, String> cityCol = new TableColumn<>("City");
         cityCol.setCellValueFactory(new PropertyValueFactory<Student,String>("city"));
         table.getColumns().addAll(emailCol, nameCol, birthdayCol, genderCol, adressCol, countryCol, cityCol);
+        table.setPrefWidth(700);
 
 
         Button add = new Button("Add");
@@ -113,11 +116,22 @@ public class StudentController {
         delete.setOnAction(e -> {
             Student student = table.getSelectionModel().getSelectedItem();
             if (student != null) {
-            studentDAO.deleteStudent(student);
+                studentDAO.deleteStudent(student);
                 stage.close();
                 display();
             } else {
                 System.out.println("No student selected");
+            }
+        });
+
+        table.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                Student selectedStudent = table.getSelectionModel().getSelectedItem();
+                if (selectedStudent != null) {
+                    StudentStatistics statistics = new StudentStatistics(selectedStudent);
+                    StudentStatistics.display();
+                    stage.close();
+                }
             }
         });
 

@@ -15,4 +15,5 @@ public interface CourseDAO {
     List<String> getTop3CertifiedCourses();
     public List<String> getRecommendedCourses(String selectedCourse);
     public int getNumCompletedCourses(String courseName);
+    public List<Course> getCoursesByStudentEmail(String emailAddress);
 }

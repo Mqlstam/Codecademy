@@ -107,11 +107,11 @@ public class StudentDAOImpl implements StudentDAO{
     }
     
     @Override
-    public List<String> getCertificatesByEmail(String email) {
+    public List<String> getCertificatesByEmail(String Email) {
         List<String> certificates = new ArrayList<>();
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("SELECT Certificate.CertificateID FROM Certificate INNER JOIN Enrollment ON Certificate.CertificateID = Enrollment.CertificateID WHERE Enrollment.StudentEmail = ?");
-            query.setString(1, email);
+            PreparedStatement query = db.prepareStatement("SELECT C.CertificateID FROM Certificate C INNER JOIN Enrollment E ON C.CertificateID = E.CertificateID WHERE E.StudentEmail = ?");
+            query.setString(1, Email);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 String certificateName = rs.getString("CertificateID");
@@ -124,7 +124,7 @@ public class StudentDAOImpl implements StudentDAO{
     }
 
     @Override
-    public void getProgressPerModuleForAccount(String emailAddress, int courseId) {
+    public void getProgressPerModuleForAccount(String emailAddress, String courseName) {
     try (Connection db = dbConnection.getConnection()) {
         
 
@@ -138,12 +138,12 @@ public class StudentDAOImpl implements StudentDAO{
             "ORDER BY M.FollowNumber;";
 
         PreparedStatement progressStatement = db.prepareStatement(progressQuery);
-        progressStatement.setInt(1, courseId);
+        progressStatement.setString(1, courseName);
         progressStatement.setString(2, emailAddress);
 
         ResultSet resultSet = progressStatement.executeQuery();
 
-        System.out.println("Progress per module for account " + emailAddress + " and course ID " + courseId + ":");
+        System.out.println("Progress per module for account " + emailAddress + " and course name " + courseName + ":");
         while (resultSet.next()) {
             int moduleId = resultSet.getInt("FollowNumber");
             String title = resultSet.getString("ModuleTitle");

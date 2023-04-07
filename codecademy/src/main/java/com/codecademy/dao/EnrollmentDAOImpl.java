@@ -21,7 +21,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
     @Override
     public void addEnrollment(String studentEmail, String courseName) {
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("INSERT INTO Enrollment VALUES(GETDATE() ,?, ?)");
+            PreparedStatement query = db.prepareStatement("INSERT INTO Enrollment VALUES(GETDATE() ,?, ?, NULL)");
             query.setString(1, studentEmail);
             query.setString(2, courseName);
             query.executeUpdate();
@@ -34,7 +34,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
     @Override
     public void deleteEnrollment(Enrollment enrollment) {
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("DELETE FROM Enrollment WHERE EnrollmentDateTime = ?");
+            PreparedStatement query = db.prepareStatement("DELETE FROM Enrollment WHERE EnrollmentDatetime = ?");
             query.setString(1, enrollment.getEnrollmentDateTime().toString());
             query.executeUpdate();
         } catch (SQLException e) {
@@ -65,7 +65,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
     @Override
     public void updateEnrollment(Enrollment enrollment) {
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("UPDATE Enrollment SET StudentEmail = ?, CourseName = ? WHERE EnrollmentDateTime = ?");
+            PreparedStatement query = db.prepareStatement("UPDATE Enrollment SET StudentEmail = ?, CourseName = ? WHERE EnrollmentDatetime = ?");
             query.setString(1, enrollment.getStudentEmail());
             query.setString(2, enrollment.getCourseName());
             query.setString(3, enrollment.getEnrollmentDateTime().toString());
@@ -81,7 +81,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
     public double getCompletionPercentageByGender(String gender) {
         double completionPercentage = 0;
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("SELECT COUNT(DISTINCT CourseName) AS TotalCourses, COUNT(DISTINCT CertificateID) AS CompletedCourses FROM Enrollment E JOIN Student S ON E.StudentEmail = S.Email JOIN Certificate C ON E.CertificateID = C.CertificateID WHERE S.Gender = ?");
+            PreparedStatement query = db.prepareStatement("SELECT COUNT(DISTINCT CourseName) AS TotalCourses, COUNT(DISTINCT C.CertificateID) AS CompletedCourses FROM Enrollment E JOIN Student S ON E.StudentEmail = S.StudentEmail JOIN Certificate C ON E.CertificateID = C.CertificateID WHERE S.Gender = ?");
             query.setString(1, gender);
             ResultSet rs = query.executeQuery();
             if(rs.next()) {
@@ -99,7 +99,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
     public void updateRegistrationWithCertificate(String emailAddress, int courseId, int certificateId) {
         try(Connection db = dbConnection.getConnection())
         {
-            String updateRegistrationQuery = "UPDATE Enrollment SET CertificaatID = ? WHERE StudentEmail = ? AND CourseID = ?";
+            String updateRegistrationQuery = "UPDATE Enrollment SET CertificateID = ? WHERE StudentEmail = ? AND CourseName = ?";
             PreparedStatement updateRegistrationStmt = db.prepareStatement(updateRegistrationQuery);
             updateRegistrationStmt.setInt(1, certificateId);
             updateRegistrationStmt.setString(2, emailAddress);

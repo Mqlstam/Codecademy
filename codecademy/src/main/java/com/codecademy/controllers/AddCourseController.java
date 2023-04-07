@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -51,12 +52,6 @@ public class AddCourseController{
         
 
         TextField courseName = new TextField();
-        ChoiceBox<String> ModuleId = new ChoiceBox<>();
-        ObservableList<String> ModuleIdList = moduleDAO.getModuleIds();
-        ModuleId.getItems().addAll(ModuleIdList);
-        ModuleId.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue) -> {
-            moduleId = Integer.parseInt(newValue);
-        });
         
         TextField courseTopic = new TextField();
         TextField courseIntroText = new TextField();
@@ -74,10 +69,13 @@ public class AddCourseController{
         courseName.setPromptText("Course name");
         courseTopic.setPromptText("Course topic");
         courseIntroText.setPromptText("Course Intro Text");
+        courseTag.setPromptText("Course tag");
         Button back = new Button("Back");
         Button save = new Button("Save");
+        
         save.setOnAction(e -> {
             courseDAO.addCourse(new Course(courseName.getText(), courseTopic.getText(), courseIntroText.getText(), courseTag.getText(), Difficulty.valueOf(courseDifficulty.toUpperCase())));
+            //moduleDAO.
             stage.close();
             CourseController.display();
         });
@@ -90,7 +88,7 @@ public class AddCourseController{
         save.setPrefSize(50, 30);
 
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(course, courseName, ModuleId, courseTopic, courseIntroText, courseTag, difficulty, hBox);
+        vBox.getChildren().addAll(course, courseName, courseTopic, courseIntroText, courseTag, difficulty, hBox);
         
         vBox.setSpacing(25);
 

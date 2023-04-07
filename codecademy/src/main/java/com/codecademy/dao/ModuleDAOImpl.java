@@ -8,73 +8,104 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.codecademy.database.DbConnection;
+import com.codecademy.domain.Module;
+import com.codecademy.domain.ModuleProgress;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class ModuleDAOImpl implements ModuleDAO {
-  
+
     private DbConnection dbConnection;
 
     public ModuleDAOImpl(DbConnection dbConnection) {
         this.dbConnection = dbConnection;
     }
 
-
     @Override
-public void getAverageProgressPerModule(int courseId) {
-    try (Connection db = dbConnection.getConnection()) {
+    public List<Module> getAverageProgressPerModule(String courseName, String studentEmail) {
+        List<Module> modules = new ArrayList<>();
+        try (Connection db = dbConnection.getConnection()) {
+
+            // Get the average progress per module for the selected course
+            String averageProgressQuery = "SELECT M.FollowNumber, M.ModuleTitle, SC.percentage AS progress " +
+                    "FROM Module M " +
+                    "JOIN Content C ON M.ContentID = C.ContentID " +
+                    "JOIN Student_Content SC ON C.ContentID = SC.ContentID " +
+                    "WHERE M.CourseName = ? " +
+                    "AND SC.StudentEmail = ? " +
+                    "ORDER BY M.FollowNumber;";
+
+            PreparedStatement averageProgressStatement1 = db.prepareStatement(averageProgressQuery);
+            averageProgressStatement1.setString(1, courseName);
+            averageProgressStatement1.setString(2, studentEmail);
+
+            ResultSet resultSet1 = averageProgressStatement1.executeQuery();
+
+            System.out.println("Average progress per module for course ID " + courseName + ":" + studentEmail);
+            while (resultSet1.next()) {
+                int moduleId = resultSet1.getInt("FollowNumber");
+                String title = resultSet1.getString("ModuleTitle");
+                double averageProgress = resultSet1.getDouble("progress");
+                System.out.println("Module ID: " + moduleId + ", Title: " + title + ", Average progress: " + averageProgress + "%");
+                Module module = new Module(moduleId, title, averageProgress);
+                modules.add(module);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while getting the average progress per module: " + e.getMessage());
+        }
+        return modules;
+    }
+
+    public List<ModuleProgress> getAverageProgressPerModuleAllStudents(String courseName) {
+        List<ModuleProgress> moduleProgressList = new ArrayList<>();
+        try (Connection db = dbConnection.getConnection()) {
+            // Get the average progress per module for the selected course and all students
+            String averageProgressQueryAllStudents = "SELECT M.FollowNumber, M.ModuleTitle, AVG(SC.percentage) AS average_progress " +
+                    "FROM Module M " +
+                    "JOIN Content C ON M.ContentID = C.ContentID " +
+                    "JOIN Student_Content SC ON C.ContentID = SC.ContentID " +
+                    "JOIN Student S ON SC.StudentEmail = S.StudentEmail " +
+                    "WHERE M.CourseName = ? " +
+                    "GROUP BY M.FollowNumber, M.ModuleTitle " +
+                    "ORDER BY M.FollowNumber;";
     
-        // Get the average progress per module for the selected course
-            String averageProgressQuery = "SELECT M.FollowNumber, M.ModuleTitle, AVG(SC.percentage) AS average_progress " +
-                                        "FROM Module M " +
-                                        "JOIN Course cs ON cs.CourseName = M.CourseName " +
-                                        "JOIN Content C ON M.ContentID = C.ContentID " +
-                                        "JOIN Student_Content SC ON C.ContentID = SC.ContentID " +
-                                        "WHERE cs.CourseName = ? " +
-                                        "GROUP BY M.FollowNumber, M.ModuleTitle " +
-                                        "ORDER BY M.FollowNumber;"; 
-
-        PreparedStatement averageProgressStatement = db.prepareStatement(averageProgressQuery);
-        averageProgressStatement.setInt(1, courseId);
-
-        ResultSet resultSet = averageProgressStatement.executeQuery();
-
-        System.out.println("Average progress per module for course ID " + courseId + ":");
-        while (resultSet.next()) {
-            int moduleId = resultSet.getInt("FollowNumber");
-            String title = resultSet.getString("ModuleTitle");
-            double averageProgress = resultSet.getDouble("average_progress");
-
-            System.out.println("Module ID: " + moduleId + ", Title: " + title + ", Average progress: " + averageProgress + "%");
+            PreparedStatement averageProgressStatement = db.prepareStatement(averageProgressQueryAllStudents);
+            averageProgressStatement.setString(1, courseName);
+    
+            ResultSet resultSet = averageProgressStatement.executeQuery();
+                while (resultSet.next()) {
+                int followNumber = resultSet.getInt("FollowNumber");
+                String title = resultSet.getString("ModuleTitle");
+                double averageProgress = resultSet.getDouble("average_progress");
+    
+                ModuleProgress moduleProgress = new ModuleProgress(followNumber, title, averageProgress);
+                moduleProgressList.add(moduleProgress);            }
+        } catch (SQLException e) {
+            System.out.println("Error while getting the average progress per module: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error while getting the average progress per module: " + e.getMessage());
+        return moduleProgressList;
     }
-}
-
+    
+    
     @Override
-    public boolean hasCompletedAllModules(String emailAddress, int courseId) {
+    public ObservableList<Module> getAllModules() {
+        try (Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("SELECT * FROM Module");
+            ResultSet result = query.executeQuery();
 
-       try(Connection db = dbConnection.getConnection()) {
-           
-        String checkCompletionQuery = "SELECT COUNT(*) AS module_count FROM Module WHERE ContentID IN (SELECT ContentID FROM Student_Content WHERE StudentEmail = ? AND percentage = 100)";
-        PreparedStatement checkCompletionStmt = db.prepareStatement(checkCompletionQuery);
-        checkCompletionStmt.setString(1, emailAddress);
-        ResultSet rs = checkCompletionStmt.executeQuery();
+            ObservableList<Module> list = FXCollections.observableArrayList();
 
-        int moduleCount = 0;
-        if (rs.next()) {
-            moduleCount = rs.getInt("module_count");
+            while (result.next()) {
+                list.add(new Module(result.getInt("FollowNumber"), result.getString("ModuleTitle"),
+                        result.getInt("contentID"), result.getInt("Version"), result.getString("CourseName"),
+                        result.getString("ContactpersonEmail")));
+            }
+            return list;
+        } catch (Exception e) {
+            System.err.println("Error in getStudents");
+            e.printStackTrace();
         }
-        return moduleCount > 0;
-    } catch (SQLException e) {
-        System.out.println("Error while checking if all modules are completed: " + e.getMessage());
-    }
-        return false;
+        return null;
     }
 }
-       
-        
-
-

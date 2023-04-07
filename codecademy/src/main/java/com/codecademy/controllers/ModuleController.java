@@ -28,6 +28,7 @@ public class ModuleController {
  
         FlowPane root = new FlowPane();
         TableView table = new TableView();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         Label moduleOverview = new Label("Module overview");
         moduleOverview.setFont(Font.font("Arial",FontWeight.BOLD ,30));
 
@@ -51,7 +52,6 @@ public class ModuleController {
         TableColumn moduleversion = new TableColumn("version");
         TableColumn follownumber = new TableColumn("Follow Number");
  
-
         table.getColumns().addAll(follownumber, moduleversion, contactName, contactEmail);
  
         VBox vbox = new VBox();
@@ -66,7 +66,6 @@ public class ModuleController {
         add.setOnAction(e -> {
             AddModuleController.display();
         });
-
 
         back.setOnAction(e -> {
             MainMenu.display();

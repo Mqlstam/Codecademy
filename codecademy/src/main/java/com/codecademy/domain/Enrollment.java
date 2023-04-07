@@ -7,15 +7,22 @@ public class Enrollment {
     private LocalDateTime enrollmentDateTime;
     private String studentEmail;
     private String courseName;
-    private int progress;
+    private int CertificateID;
     private ArrayList<Certificate> certificates;
 
     public Enrollment(String studentEmail, String courseName, LocalDateTime date) {
         this.studentEmail = studentEmail;
         this.courseName = courseName;
         this.enrollmentDateTime = date;
-        this.progress = 0;
     }
+
+    public Enrollment(String studentEmail, String courseName, LocalDateTime date, int CertificateID) {
+        this.studentEmail = studentEmail;
+        this.courseName = courseName;
+        this.enrollmentDateTime = date;
+        this.CertificateID = CertificateID;
+    }
+    
 
     public void addCertificate(Certificate certificate) {
         this.certificates.add(certificate);
@@ -45,14 +52,13 @@ public class Enrollment {
         this.courseName = courseName;
     }
 
-    public int getProgress() {
-        return progress;
+    public int getCertificateID() {
+        return CertificateID;
     }
 
-    public void setProgress(int progress) {
-        this.progress = progress;
+    public void setCertificateID(int certificateID) {
+        CertificateID = certificateID;
     }
-
     public ArrayList<Certificate> getCertificates() {
         return certificates;
     }
