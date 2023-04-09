@@ -12,6 +12,7 @@ import com.codecademy.database.DbConnection;
 import com.codecademy.domain.Course;
 import com.codecademy.domain.Student;
 import com.codecademy.domain.Module;
+import com.codecademy.domain.ModuleProgress;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -86,13 +87,13 @@ public class StudentStatistics {
         ComboBox<Course> courseComboBox = new ComboBox<>();
         Label courseLabel = new Label("Select course:");
         courseLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        TableView<Module> tableView = new TableView<>();
+        TableView<ModuleProgress> tableView = new TableView<>();
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        TableColumn<Module, Integer> moduleIdCol = new TableColumn<>("FollowNumber");
+        TableColumn<ModuleProgress, Integer> moduleIdCol = new TableColumn<>("FollowNumber");
         moduleIdCol.setCellValueFactory(new PropertyValueFactory<>("FollowNumber"));
-        TableColumn<Module, String> titleCol = new TableColumn<>("ModuleTitle");
+        TableColumn<ModuleProgress, String> titleCol = new TableColumn<>("ModuleTitle");
         titleCol.setCellValueFactory(new PropertyValueFactory<>("ModuleTitle"));
-        TableColumn<Module, Double> progressCol = new TableColumn<>("progress");
+        TableColumn<ModuleProgress, Double> progressCol = new TableColumn<>("progress");
         progressCol.setCellValueFactory(new PropertyValueFactory<>("progress"));
         tableView.getColumns().addAll(moduleIdCol, titleCol, progressCol);
         VBox progressBox = new VBox(courseLabel, courseComboBox, tableView);
@@ -114,7 +115,7 @@ public class StudentStatistics {
         courseComboBox.setOnAction(e -> {
             Course selectedCourse = courseComboBox.getValue();
             if (selectedCourse != null) {
-                List<Module> moduleProgressList = moduleDAO.getAverageProgressPerModule(selectedCourse.getCourseName(),
+                List<ModuleProgress> moduleProgressList = moduleDAO.getAverageProgressPerModule(selectedCourse.getCourseName(),
                         student.getEmail());
                 tableView.setItems(FXCollections.observableArrayList(moduleProgressList));
             }

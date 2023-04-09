@@ -5,7 +5,6 @@ public class Module {
     private int contentID;
     private String moduleTitle;
     private int version;
-    private double progress;
     private String contactPersonEmail;
     private String courseName;
 
@@ -17,12 +16,6 @@ public class Module {
         this.version = version;
         this.contactPersonEmail = contactPersonEmail;
         this.courseName = courseName;
-    }
-
-    public Module(int followNumber, String moduleTitle, double progress) {
-        this.followNumber = followNumber;
-        this.moduleTitle = moduleTitle;
-        this.progress = progress;
     }
 
     // Getters and setters
@@ -68,14 +61,6 @@ public class Module {
 
     public String getCourseName() {
         return courseName;
-    }
-
-    public double getProgress(){
-        return progress;
-    }
-
-    public void setProgress(double progress){
-        this.progress = progress;
     }
 
     public void setCourseName(String courseName) {

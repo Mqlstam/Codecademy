@@ -121,14 +121,14 @@ public class CourseStatistics {
         progressRoot.setAlignment(Pos.CENTER);
 
         // Define the columns for the table
-        TableColumn<ModuleProgress, Integer> followNumberCol = new TableColumn<>("Follow Number");
-        followNumberCol.setCellValueFactory(new PropertyValueFactory<>("followNumber"));
+        TableColumn<ModuleProgress, Integer> followNumberCol = new TableColumn<>("FollowNumber");
+        followNumberCol.setCellValueFactory(new PropertyValueFactory<>("FollowNumber"));
 
-        TableColumn<ModuleProgress, String> moduleNameCol = new TableColumn<>("Module Name");
-        moduleNameCol.setCellValueFactory(new PropertyValueFactory<>("moduleName"));
+        TableColumn<ModuleProgress, String> moduleNameCol = new TableColumn<>("ModuleTitle");
+        moduleNameCol.setCellValueFactory(new PropertyValueFactory<>("ModuleTitle"));
 
-        TableColumn<ModuleProgress, Double> avgProgressCol = new TableColumn<>("Average Progress");
-        avgProgressCol.setCellValueFactory(new PropertyValueFactory<>("averageProgress"));
+        TableColumn<ModuleProgress, Double> avgProgressCol = new TableColumn<>("progress");
+        avgProgressCol.setCellValueFactory(new PropertyValueFactory<>("progress"));
 
         // Add the columns to the table
         tableView.getColumns().addAll(followNumberCol, moduleNameCol, avgProgressCol);

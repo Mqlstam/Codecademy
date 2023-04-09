@@ -15,7 +15,6 @@ import javafx.collections.ObservableList;
 
 public class CertificateDAOimpl implements CertificateDAO{
 
-
     private DbConnection dbConnection;
     private Timestamp timestamp;
 

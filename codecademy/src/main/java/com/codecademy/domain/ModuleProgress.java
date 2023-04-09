@@ -2,24 +2,24 @@ package com.codecademy.domain;
 
 public class ModuleProgress {
     private int followNumber;
-    private String moduleName;
-    private double averageProgress;
+    private String moduleTitle;
+    private double progress;
 
-    public ModuleProgress(int followNumber, String moduleName, double averageProgress) {
+    public ModuleProgress(int followNumber, String moduleTitle, double progress) {
         this.followNumber = followNumber;
-        this.moduleName = moduleName;
-        this.averageProgress = averageProgress;
+        this.moduleTitle = moduleTitle;
+        this.progress = progress;
     }
 
     public int getFollowNumber() {
         return followNumber;
     }
 
-    public String getModuleName() {
-        return moduleName;
+    public String getModuleTitle() {
+        return moduleTitle;
     }
 
-    public double getAverageProgress() {
-        return averageProgress;
+    public double getProgress() {
+        return progress;
     }
 }

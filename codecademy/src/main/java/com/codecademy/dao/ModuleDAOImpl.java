@@ -23,8 +23,8 @@ public class ModuleDAOImpl implements ModuleDAO {
     }
 
     @Override
-    public List<Module> getAverageProgressPerModule(String courseName, String studentEmail) {
-        List<Module> modules = new ArrayList<>();
+    public List<ModuleProgress> getAverageProgressPerModule(String courseName, String studentEmail) {
+        List<ModuleProgress> modules = new ArrayList<>();
         try (Connection db = dbConnection.getConnection()) {
 
             // Get the average progress per module for the selected course
@@ -48,7 +48,7 @@ public class ModuleDAOImpl implements ModuleDAO {
                 String title = resultSet1.getString("ModuleTitle");
                 double averageProgress = resultSet1.getDouble("progress");
                 System.out.println("Module ID: " + moduleId + ", Title: " + title + ", Average progress: " + averageProgress + "%");
-                Module module = new Module(moduleId, title, averageProgress);
+                ModuleProgress module = new ModuleProgress(moduleId, title, averageProgress);
                 modules.add(module);
             }
         } catch (SQLException e) {
@@ -61,7 +61,7 @@ public class ModuleDAOImpl implements ModuleDAO {
         List<ModuleProgress> moduleProgressList = new ArrayList<>();
         try (Connection db = dbConnection.getConnection()) {
             // Get the average progress per module for the selected course and all students
-            String averageProgressQueryAllStudents = "SELECT M.FollowNumber, M.ModuleTitle, AVG(SC.percentage) AS average_progress " +
+            String averageProgressQueryAllStudents = "SELECT M.FollowNumber, M.ModuleTitle, AVG(SC.percentage) AS progress " +
                     "FROM Module M " +
                     "JOIN Content C ON M.ContentID = C.ContentID " +
                     "JOIN Student_Content SC ON C.ContentID = SC.ContentID " +
@@ -77,8 +77,8 @@ public class ModuleDAOImpl implements ModuleDAO {
                 while (resultSet.next()) {
                 int followNumber = resultSet.getInt("FollowNumber");
                 String title = resultSet.getString("ModuleTitle");
-                double averageProgress = resultSet.getDouble("average_progress");
-    
+                double averageProgress = resultSet.getDouble("progress");
+                System.out.println("Module ID: " + followNumber + ", Title: " + title + ", Average progress: " + averageProgress + "%");
                 ModuleProgress moduleProgress = new ModuleProgress(followNumber, title, averageProgress);
                 moduleProgressList.add(moduleProgress);            }
         } catch (SQLException e) {

@@ -9,6 +9,6 @@ import javafx.collections.ObservableList;
 
 public interface ModuleDAO {
     ObservableList<Module> getAllModules();
-    public List<Module> getAverageProgressPerModule(String courseName, String studentEmail);
+    public List<ModuleProgress> getAverageProgressPerModule(String courseName, String studentEmail);
     public List<ModuleProgress> getAverageProgressPerModuleAllStudents(String courseName);
 }
