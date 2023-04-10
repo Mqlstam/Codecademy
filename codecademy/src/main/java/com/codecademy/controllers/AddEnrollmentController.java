@@ -8,7 +8,6 @@ import com.codecademy.dao.StudentDAO;
 import com.codecademy.dao.StudentDAOImpl;
 import com.codecademy.database.DbConnection;
 
-import javafx.beans.Observable;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
