@@ -46,12 +46,17 @@ public class EditCourseController {
         courseName.setText(course.getCourseName());
         courseName.setEditable(false);
         ChoiceBox<String> ModuleId = new ChoiceBox<>();
-        // ObservableList<String> ModuleIdList = moduleDAO.getModuleIds();
-        ModuleId.getItems().addAll(ModuleIdList);
+        ObservableList<com.codecademy.domain.Module> moduleList = moduleDAO.getAllModules();
+        ObservableList<String> moduleIdList = FXCollections.observableArrayList();
+        for (com.codecademy.domain.Module module : moduleList) {
+            moduleIdList.add(String.valueOf(module.getFollowNumber()));
+        }
+        
+        ModuleId.getItems().addAll(moduleIdList);
         ModuleId.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue) -> {
             moduleId = Integer.parseInt(newValue);
         });
-        // ModuleId.setValue(String.valueOf(course.getModuleId()));
+
         
         TextField courseTopic = new TextField();
         courseTopic.setText(course.getCourseTopic());
