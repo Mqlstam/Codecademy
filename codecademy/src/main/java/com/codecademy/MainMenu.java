@@ -62,7 +62,7 @@ public class MainMenu extends Application {
         root.setAlignment(Pos.CENTER);
         root.getChildren().add(vBox);
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(Paths.get("codecademy/src/main/resources/com/codecademy/Styles.css").toUri().toString());
+        scene.getStylesheets().add(Paths.get("src/main/resources/com/codecademy/styles.css").toUri().toString());
 
 
         student.setOnAction(e -> {
