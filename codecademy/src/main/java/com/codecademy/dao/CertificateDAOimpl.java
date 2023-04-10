@@ -87,44 +87,4 @@ public class CertificateDAOimpl implements CertificateDAO{
         }
     }
     
-    // @Override
-    // public void issueCertificateIfCompleted(String emailAddress, int courseId) {
-    //     try (Connection db = dbConnection.getConnection()) {
-           
-    
-    //         // Check if all modules are completed
-    //         String checkCompletionQuery = "SELECT COUNT(*) AS total_modules, " +
-    //             "(SELECT COUNT(*) FROM Student_Content WHERE StudentEmail = ? AND percentage = 100) AS completed_modules " +
-    //             "FROM Module WHERE ContentID IN (SELECT ContentID FROM Course WHERE CourseName = ?);";
-            
-    //         PreparedStatement checkCompletionStatement = db.prepareStatement(checkCompletionQuery);
-    //         checkCompletionStatement.setString(1, emailAddress);
-    //         checkCompletionStatement.setInt(2, courseId);
-            
-    //         ResultSet resultSet = checkCompletionStatement.executeQuery();
-            
-    //         if (resultSet.next()) {
-    //             int totalModules = resultSet.getInt("total_modules");
-    //             int completedModules = resultSet.getInt("completed_modules");
-    
-    //             if (completedModules == totalModules) {
-    //                 // Issue certificate
-    //                 String issueCertificateQuery = "INSERT INTO Certificate (Grade, employee) " +
-    //                     "SELECT InschrijfDate, 'PASS', 'System' FROM Enrollment WHERE StudentEmail = ? AND CourseName = ?;";
-                    
-    //                 PreparedStatement issueCertificateStatement = db.prepareStatement(issueCertificateQuery);
-    //                 issueCertificateStatement.setString(1, emailAddress);
-    //                 issueCertificateStatement.setInt(2, courseId);
-    //                 issueCertificateStatement.executeUpdate();
-    
-    //                 System.out.println("Certificate issued for student with email: " + emailAddress);
-    //             } else {
-    //                 System.out.println("Student with email " + emailAddress + " has not completed all modules.");
-    //             }
-    //         }
-    //     } catch (SQLException e) {
-    //         System.out.println("Error while issuing the certificate: " + e.getMessage());
-    //     }
-    // }
-    
 }
