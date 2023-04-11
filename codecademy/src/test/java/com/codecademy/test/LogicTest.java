@@ -26,7 +26,7 @@ public class LogicTest {
         //assert
         assertEquals(false, valid);
     }
-     @Test
+    @Test
     public void testDateFebInLeapYearInRange(){
         //arrange
         Logic validator= new Logic();
@@ -127,38 +127,38 @@ public class LogicTest {
         assertEquals(true, result);
     }
 
-    // @Test
-    // public void testIsValidPercentageReturnsTrue(){
-    //     //arrange
-    //     Logic validator = new Logic();
-    //     int percentage = 50;
-    //     //act
-    //     Boolean result = validator.numericRangeTools(percentage);
-    //     //assert
-    //     assertEquals(true, result);
-    // }
+    @Test
+    public void testIsValidGradeReturnsTrue(){
+        //arrange
+        Logic validator = new Logic();
+        double grade = 5.0;
+        //act
+        Boolean result = validator.isValidGrade(grade);
+        //assert
+        assertEquals(true, result);
+    }
 
-    // @Test
-    // public void testIsValidPercentageReturnsFalseBelowZero(){
-    //     //arrange
-    //     Logic validator = new Logic();
-    //     int percentage = -1;
-    //     //act
-    //     Boolean result = validator.numericRangeTools(percentage);
-    //     //assert
-    //     assertEquals(false, result);
-    // }
+    @Test
+    public void testIsValidGradeReturnsFalseBelowZero(){
+        //arrange
+        Logic validator = new Logic();
+        double grade = -1.0;
+        //act
+        Boolean result = validator.isValidGrade(grade);
+        //assert
+        assertEquals(false, result);
+    }
 
-    // @Test
-    // public void testIsValidPercentageReturnsFalseAboveOneHundred(){
-    //     //arrange
-    //     Logic validator = new Logic();
-    //     int percentage = 110;
-    //     //act
-    //     Boolean result = validator.numericRangeTools(percentage);
-    //     //assert
-    //     assertEquals(false, result);
-    // }
+    @Test
+    public void testIsValidGradeReturnsFalseAboveTen(){
+        //arrange
+        Logic validator = new Logic();
+        double grade = 11.0;
+        //act
+        Boolean result = validator.isValidGrade(grade);
+        //assert
+        assertEquals(false, result);
+    }
 
 
     @Test (expected = NullPointerException.class)
