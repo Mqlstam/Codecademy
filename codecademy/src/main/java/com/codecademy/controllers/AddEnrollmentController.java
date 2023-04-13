@@ -101,6 +101,7 @@ public class AddEnrollmentController {
 
         back.setOnAction(e -> {
             stage.close();
+            EnrollmentController.display();
         });
     }
 }

@@ -4,6 +4,7 @@ import com.codecademy.dao.CertificateDAO;
 import com.codecademy.dao.CertificateDAOimpl;
 import com.codecademy.database.DbConnection;
 import com.codecademy.domain.Certificate;
+import com.codecademy.logic.Logic;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -70,6 +71,11 @@ public class AddCertificateController {
 
         save.setOnAction(e -> {
             double gradeValue = Double.parseDouble(grade.getText());
+            Logic logic = new Logic();
+            if(logic.isValidGrade(gradeValue) == false) {
+                grade.setText("Grade must be between 1 and 10");
+                return;
+            }
             certificateDAO.addCertificate(new Certificate(gradeValue, employee.getText()));
             stage.close();
             CertificateController.display();
