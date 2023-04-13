@@ -34,8 +34,8 @@ public class EnrollmentDAOImpl implements EnrollmentDAO{
     @Override
     public void deleteEnrollment(Enrollment enrollment) {
         try(Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("DELETE FROM Enrollment WHERE EnrollmentDatetime = ?");
-            query.setString(1, enrollment.getEnrollmentDateTime().toString());
+            PreparedStatement query = db.prepareStatement("DELETE FROM Enrollment WHERE StudentEmail = ?");
+            query.setString(1, enrollment.getStudentEmail());
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error in deleteEnrollment");
