@@ -98,7 +98,7 @@ public class StatisticsController {
         coursesRoot.getChildren().addAll(coursesVbox);
 
         // Create the ChoiceBox and Label for the Completion Percentage by Gender tab
-        ChoiceBox<String> genderChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList("Male", "Female"));
+        ChoiceBox<String> genderChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList("Male", "Female", "Other"));
         Label percentageLabel = new Label(String.format("%.2f%%", genderPercentage));
         percentageLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         percentageLabel.setAlignment(Pos.CENTER);

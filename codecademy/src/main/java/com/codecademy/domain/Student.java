@@ -4,17 +4,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Student {
-    private String email, name, gender, adress, city, country;
+    private String email, name, gender;
     private LocalDate birthDate;
+    private Address adress;
 
-    public Student(String email, String name, LocalDate birthDate, String gender, String adress, String country, String city) {
+    public Student(String email, String name, LocalDate birthDate, String gender, Address adress) {
         this.email = email;
         this.name = name;
         this.birthDate = birthDate;
         this.gender = gender;
         this.adress = adress;
-        this.country = country;
-        this.city = city;
     }
 
     public String getEmail() {
@@ -41,28 +40,12 @@ public class Student {
         this.gender = gender;
     }
 
-    public String getAdress() {
+    public Address getAddress() {
         return adress;
     }
 
-    public void setAdress(String adress) {
+    public void setAddress(Address adress) {
         this.adress = adress;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public LocalDate getBirthDate() {

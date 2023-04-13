@@ -11,6 +11,7 @@ import com.codecademy.dao.StudentDAOImpl;
 import com.codecademy.database.DbConnection;
 import com.codecademy.domain.Student;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -57,14 +58,18 @@ public class StudentController {
         birthdayCol.setCellValueFactory(new PropertyValueFactory<Student,LocalDate>("birthDate"));
         TableColumn<Student, String> genderCol = new TableColumn<>("gender");
         genderCol.setCellValueFactory(new PropertyValueFactory<Student,String>("gender"));
-        TableColumn<Student, String> adressCol = new TableColumn<>("adress");
-        adressCol.setCellValueFactory(new PropertyValueFactory<Student,String>("adress"));
-        TableColumn<Student, String> countryCol = new TableColumn<>("Country");
-        countryCol.setCellValueFactory(new PropertyValueFactory<Student, String>("country"));
+        TableColumn<Student, String> streetCol = new TableColumn<>("Street");
+        streetCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getStreet()));
+        TableColumn<Student, String> houseNumberCol = new TableColumn<>("House Number");
+        houseNumberCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getHouseNumber()));
+        TableColumn<Student, String> postalCodeCol = new TableColumn<>("Postal Code");
+        postalCodeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPostalCode()));
         TableColumn<Student, String> cityCol = new TableColumn<>("City");
-        cityCol.setCellValueFactory(new PropertyValueFactory<Student,String>("city"));
-        table.getColumns().addAll(emailCol, nameCol, birthdayCol, genderCol, adressCol, countryCol, cityCol);
-        table.setPrefWidth(700);
+        cityCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCity()));
+        TableColumn<Student, String> countryCol = new TableColumn<>("Country");
+        countryCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCountry()));
+        table.getColumns().addAll(emailCol, nameCol, birthdayCol, genderCol, streetCol, houseNumberCol, postalCodeCol, cityCol, countryCol);
+        table.setPrefWidth(800);
 
 
         Button add = new Button("Add");

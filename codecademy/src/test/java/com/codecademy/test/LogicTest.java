@@ -21,7 +21,7 @@ public class LogicTest {
         Logic validator= new Logic();
 
         //act
-       boolean valid = validator.dateTool(30, 2, 2022);
+        boolean valid = validator.dateTool(30, 2, 2022);
 
         //assert
         assertEquals(false, valid);
@@ -32,7 +32,7 @@ public class LogicTest {
         Logic validator= new Logic();
 
         //act
-       boolean valid = validator.dateTool(12, 2, 2022);
+        boolean valid = validator.dateTool(12, 2, 2022);
 
         //assert
         assertEquals(true, valid);
@@ -43,7 +43,7 @@ public class LogicTest {
         Logic validator= new Logic();
 
         //act
-       boolean valid = validator.dateTool(23, 11, 2022);
+        boolean valid = validator.dateTool(23, 11, 2022);
 
         //assert
         assertEquals(true, valid);
@@ -55,7 +55,7 @@ public class LogicTest {
         Logic validator= new Logic();
 
         //act
-       boolean valid = validator.dateTool(31, 4, 2006);
+        boolean valid = validator.dateTool(31, 4, 2006);
 
         //assert
         assertEquals(false, valid);

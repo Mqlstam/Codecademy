@@ -8,9 +8,6 @@ private int certificateID;
 private double grade;
 private String employee;
 
-
-
-
     public Certificate(int certificateID, double grade, String employee) {
         this.certificateID = certificateID;
         this.grade = grade;
