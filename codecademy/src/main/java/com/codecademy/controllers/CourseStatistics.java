@@ -36,6 +36,25 @@ import javafx.stage.Stage;
 
 public class CourseStatistics {
 
+    /**
+     * 
+     * This class is responsible for displaying the details of a selected course,
+     * 
+     * including recommended courses, the number of students who completed the
+     * course,
+     * 
+     * and the average progress per module for all students in the course.
+     * 
+     * It creates a JavaFX Stage and displays the course details in a TabPane.
+     * 
+     * The recommended courses and number of completed courses are retrieved from
+     * the CourseDAO.
+     * 
+     * The average progress per module is retrieved from the ModuleDAO.
+     * 
+     * The class also defines the event handlers for the Back buttons in each tab.
+     * 
+     */
     private static Course course;
 
     public CourseStatistics(Course course) {
@@ -84,7 +103,8 @@ public class CourseStatistics {
         // Create the ListView and Back button for the numCompletedCourses tab
         FlowPane coursesRoot = new FlowPane();
         Button coursesBack = new Button("Back");
-        Label coursesTitleLabel = new Label("Number of students who completed this course: " + Integer.toString(numberCompletedCourses));
+        Label coursesTitleLabel = new Label(
+                "Number of students who completed this course: " + Integer.toString(numberCompletedCourses));
         coursesTitleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         VBox coursesVbox = new VBox(coursesTitleLabel);
         coursesVbox.setSpacing(10);
@@ -101,12 +121,12 @@ public class CourseStatistics {
         TableView<ModuleProgress> tableView = new TableView<>();
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setPrefWidth(400);
-        
+
         Button progressBack = new Button("Back");
-        
+
         Label progressTitleLabel = new Label("Average progress per module");
         progressTitleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        
+
         Region progressSpacer = new Region();
         HBox.setHgrow(progressSpacer, Priority.ALWAYS);
 
@@ -115,8 +135,8 @@ public class CourseStatistics {
         progressHbox.setPadding(new Insets(10));
 
         VBox progressVbox = new VBox(progressTitleLabel, tableView, progressHbox);
-        progressVbox.setSpacing(10);      
-        
+        progressVbox.setSpacing(10);
+
         FlowPane progressRoot = new FlowPane(progressVbox);
         progressRoot.setAlignment(Pos.CENTER);
 
@@ -134,9 +154,9 @@ public class CourseStatistics {
         tableView.getColumns().addAll(followNumberCol, moduleNameCol, avgProgressCol);
 
         // Populate the table with data
-        List<ModuleProgress> moduleProgressList = moduleDAO.getAverageProgressPerModuleAllStudents(course.getCourseName());
+        List<ModuleProgress> moduleProgressList = moduleDAO
+                .getAverageProgressPerModuleAllStudents(course.getCourseName());
         tableView.setItems(FXCollections.observableArrayList(moduleProgressList));
-
 
         averageProgressPerModule.setContent(progressRoot);
         recommendedcourses.setContent(root);
@@ -151,8 +171,13 @@ public class CourseStatistics {
             CourseController.display();
             stage.close();
         });
-        
+
         progressBack.setOnAction(e -> {
+            CourseController.display();
+            stage.close();
+        });
+
+        coursesBack.setOnAction(e -> {
             CourseController.display();
             stage.close();
         });

@@ -21,8 +21,29 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * The AddEnrollmentController class is responsible for handling user input and
+ * displaying a GUI form for adding new enrollments
+ * 
+ * to the system. It uses the EnrollmentDAO, StudentDAO, and CourseDAO classes
+ * to add new enrollments to the database.
+ */
 public class AddEnrollmentController {
-    public static void display(){
+
+    /**
+     * 
+     * The display method creates a GUI form for adding new enrollments to the
+     * system. It allows the user to select a student
+     * 
+     * and a course for the enrollment. When the user clicks the Save button, the
+     * enrollment is added to the database using the
+     * 
+     * EnrollmentDAO class. When the user clicks the Back button, the form is
+     * closed.
+     */
+
+    public static void display() {
         DbConnection dbConnection = new DbConnection();
         EnrollmentDAO enrollmentDAO = new EnrollmentDAOImpl(dbConnection);
         StudentDAO studentDAO = new StudentDAOImpl(dbConnection);
@@ -53,7 +74,7 @@ public class AddEnrollmentController {
 
         Button back = new Button("Back");
         Button save = new Button("Save");
-      
+
         HBox hBox = new HBox();
         hBox.getChildren().addAll(save, back);
         hBox.setSpacing(70);
@@ -62,7 +83,7 @@ public class AddEnrollmentController {
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(enrollment, courseName, studentEmail, hBox);
-        
+
         vBox.setSpacing(25);
 
         root.setAlignment(Pos.CENTER);

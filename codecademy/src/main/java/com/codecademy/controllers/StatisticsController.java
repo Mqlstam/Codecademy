@@ -110,8 +110,8 @@ public class StatisticsController {
         });
 
         // Add the ChoiceBox and Label to the Completion Percentage by Gender tab
-
-        VBox genderVBox = new VBox(genderChoiceBox, percentageLabel);
+        Button genderBack = new Button("Back");
+        VBox genderVBox = new VBox(genderChoiceBox, percentageLabel, genderBack);
         genderVBox.setSpacing(50);
         genderVBox.setPadding(new Insets(50));
         percentageLabel.setFont(Font.font("Arial", FontWeight.BOLD, 50));
@@ -132,6 +132,17 @@ public class StatisticsController {
             MainMenu.display();
             stage.close();
         });
+
+        coursesBack.setOnAction(e -> {
+            MainMenu.display();
+            stage.close();
+        });
+
+        genderBack.setOnAction(e -> {
+            MainMenu.display();
+            stage.close();
+        });
+
 
         stage.setScene(scene);
         stage.show();

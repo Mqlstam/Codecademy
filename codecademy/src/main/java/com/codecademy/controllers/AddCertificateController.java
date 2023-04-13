@@ -1,6 +1,5 @@
 package com.codecademy.controllers;
 
-
 import com.codecademy.dao.CertificateDAO;
 import com.codecademy.dao.CertificateDAOimpl;
 import com.codecademy.database.DbConnection;
@@ -18,12 +17,23 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * The AddCertificateController class is responsible for controlling the user
+ * interface for adding a new Certificate.
+ * It displays a window with input fields for the grade and employee name, and
+ * allows the user to save the new Certificate
+ * or go back to the CertificateController.
+ * This class communicates with the CertificateDAOImpl class to add the new
+ * Certificate to the database.
+ */
+
 public class AddCertificateController {
-    public static void display(){
+
+    public static void display() {
 
         DbConnection dbConnection = new DbConnection();
         CertificateDAO certificateDAO = new CertificateDAOimpl(dbConnection);
-
 
         Stage stage = new Stage();
         stage.setTitle("Anhtuan Nguyen(2192526), Luuk beks(2192527), Miquel Stam(2192528)");
@@ -33,17 +43,17 @@ public class AddCertificateController {
 
         FlowPane root = new FlowPane();
         Label webcast = new Label("Add Certificate");
-        webcast.setFont(Font.font("Arial",FontWeight.BOLD ,30));
+        webcast.setFont(Font.font("Arial", FontWeight.BOLD, 30));
         Scene scene = new Scene(root);
         TextField grade = new TextField();
         TextField employee = new TextField();
-        
+
         grade.setPromptText("grade");
         employee.setPromptText("Employee");
-       
+
         Button back = new Button("Back");
         Button save = new Button("Save");
-      
+
         HBox hBox = new HBox();
         hBox.getChildren().addAll(save, back);
         hBox.setSpacing(70);
@@ -52,13 +62,11 @@ public class AddCertificateController {
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(webcast, grade, employee, hBox);
-        
+
         vBox.setSpacing(25);
 
         root.setAlignment(Pos.CENTER);
         root.getChildren().addAll(vBox);
-
-        
 
         save.setOnAction(e -> {
             double gradeValue = Double.parseDouble(grade.getText());

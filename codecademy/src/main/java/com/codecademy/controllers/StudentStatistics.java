@@ -84,6 +84,7 @@ public class StudentStatistics {
         root.getChildren().addAll(vbox);
 
         // Create the ListView and Back button for the progressPerModule tab
+        Button back2 = new Button("Back");
         ComboBox<Course> courseComboBox = new ComboBox<>();
         Label courseLabel = new Label("Select course:");
         courseLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
@@ -96,7 +97,7 @@ public class StudentStatistics {
         TableColumn<ModuleProgress, Double> progressCol = new TableColumn<>("progress");
         progressCol.setCellValueFactory(new PropertyValueFactory<>("progress"));
         tableView.getColumns().addAll(moduleIdCol, titleCol, progressCol);
-        VBox progressBox = new VBox(courseLabel, courseComboBox, tableView);
+        VBox progressBox = new VBox(courseLabel, courseComboBox, tableView, back2);
         progressBox.setSpacing(10);
 
         moduleIdCol.setText("FollowNumber");
@@ -111,6 +112,12 @@ public class StudentStatistics {
         certificatesAchieved.setContent(root);
         progressPerModule.setContent(progressBox);
 
+        // Set up the event handler for the back button
+        back2.setOnAction(e -> {
+            StudentController.display();
+            stage.close();
+        });
+
         // Set up the event handler for the courseComboBox
         courseComboBox.setOnAction(e -> {
             Course selectedCourse = courseComboBox.getValue();
@@ -121,6 +128,7 @@ public class StudentStatistics {
             }
         });
 
+        
         // Add the tabs to the TabPane
         tabPane.getTabs().addAll(certificatesAchieved, progressPerModule);
 
