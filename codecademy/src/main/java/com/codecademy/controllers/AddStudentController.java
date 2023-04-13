@@ -2,6 +2,9 @@ package com.codecademy.controllers;
 
 
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
+
 import com.codecademy.dao.StudentDAO;
 import com.codecademy.dao.StudentDAOImpl;
 import com.codecademy.database.DbConnection;
@@ -64,7 +67,9 @@ public class AddStudentController {
         TextField postalCode = new TextField();
         TextField city = new TextField();
         TextField country = new TextField();
-        DatePicker birthday = new DatePicker();
+        TextField birthdayDay = new TextField();
+        TextField birthdayMonth = new TextField();
+        TextField birthdayYear = new TextField();
 
         email.setPromptText("Email");
         name.setPromptText("Name");
@@ -73,30 +78,62 @@ public class AddStudentController {
         postalCode.setPromptText("Postal Code");
         city.setPromptText("City");
         country.setPromptText("Country");
-        birthday.setPromptText("Birthday");
+        birthdayDay.setPromptText("Day");
+        birthdayMonth.setPromptText("Month");
+        birthdayYear.setPromptText("Year");
 
         Button back = new Button("Back");
         Button save = new Button("Save");
         save.setOnAction(e -> {
-            if (Logic.mailTool(email.getText()) == false || name.getText().isEmpty() || email.getText().isEmpty() || street.getText().isEmpty() || houseNumber.getText().isEmpty() || postalCode.getText().isEmpty() || city.getText().isEmpty() || country.getText().isEmpty() || birthday.getValue() == null || genderVal == null) {
+            if (Logic.mailTool(email.getText()) == false || name.getText().isEmpty() || email.getText().isEmpty() || street.getText().isEmpty() || houseNumber.getText().isEmpty() || postalCode.getText().isEmpty() || city.getText().isEmpty() || country.getText().isEmpty() || birthdayDay.getText().isEmpty() || birthdayMonth.getText().isEmpty() || birthdayYear.getText().isEmpty() || genderVal == null) {
                 errorLabel.setText("Please fill in all the fields, \nand make sure the email is valid \n(example@example.example)");
                 System.out.println("Email is not valid");
                 email.clear();
                 email.setPromptText("Email is not valid");
                 return;
             }
-            Address address = new Address(street.getText(), houseNumber.getText(), postalCode.getText(), city.getText(), country.getText());
-            studentDAO.addStudent(new Student(email.getText(), name.getText(), birthday.getValue(), genderVal, address));
-            System.out.println(genderVal);
-            stage.close();
-            StudentController.display();
-        });
+            if (!male.isSelected() && !female.isSelected() && !other.isSelected()) {
+                errorLabel.setText("Please select a gender");
+                System.out.println("Gender not selected");
+                return;
+            }
+            try {
+                int day = Integer.parseInt(birthdayDay.getText());
+                int month = Integer.parseInt(birthdayMonth.getText());
+                int year = Integer.parseInt(birthdayYear.getText());
+                if (Logic.dateTool(day, month, year) == false) {
+                    errorLabel.setText("Invalid birthday date");
+                    System.out.println("Invalid birthday date");
+                    birthdayDay.clear();
+                    birthdayMonth.clear();
+                    birthdayYear.clear();
+                    return;
+                }
+                LocalDate birthdayDate = LocalDate.of(year, month, day);
+                Address address = new Address(street.getText(), houseNumber.getText(), postalCode.getText(), city.getText(), country.getText());
+                studentDAO.addStudent(new Student(email.getText(), name.getText(), birthdayDate, genderVal, address));
+                System.out.println(genderVal);
+                stage.close();
+                StudentController.display();
+            } catch (DateTimeException ex) {
+                errorLabel.setText("Invalid birthday date");
+                System.out.println("Invalid birthday date");
+                birthdayDay.clear();
+                birthdayMonth.clear();
+                birthdayYear.clear();
+                return;
+            }
+        }); 
 
         HBox hBox = new HBox();
         hBox.getChildren().addAll(save, back);
         hBox.setSpacing(70);
         back.setPrefSize(50, 30);
         save.setPrefSize(50, 30);
+
+        HBox birthday = new HBox();
+        birthday.getChildren().addAll(birthdayDay, birthdayMonth, birthdayYear);
+        birthday.setSpacing(5);
 
         VBox vBox = new VBox();
         HBox gender = new HBox();

@@ -1,11 +1,14 @@
 package com.codecademy.controllers;
 
 
+import java.time.LocalDate;
+
 import com.codecademy.dao.StudentDAO;
 import com.codecademy.dao.StudentDAOImpl;
 import com.codecademy.database.DbConnection;
 import com.codecademy.domain.Address;
 import com.codecademy.domain.Student;
+import com.codecademy.logic.Logic;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,6 +29,7 @@ public class EditStudentController {
 
     public static void display(Student student) {
         StudentDAO studentDAO = new StudentDAOImpl(new DbConnection());
+        Logic logic = new Logic();
     
         Stage stage = new Stage();
         stage.setTitle("Anhtuan Nguyen(2192526), Luuk beks(2202133), Miquel Stam(2192528)");
@@ -42,7 +46,9 @@ public class EditStudentController {
         RadioButton male = new RadioButton("Male");
         RadioButton female = new RadioButton("Female");
         RadioButton other = new RadioButton("Other");
-        if(student.getGender().equals("Male")){
+        if (student.getGender() == null){
+            genderVal = "Unknown";
+        } else if(student.getGender().equals("Male")){
             male.selectedProperty().set(true);
         }else if(student.getGender().equals("Other")){
             other.selectedProperty().set(true);
@@ -70,7 +76,9 @@ public class EditStudentController {
         TextField postalCode = new TextField();
         TextField city = new TextField();
         TextField country = new TextField();
-        DatePicker birthday = new DatePicker();
+        TextField birthdayDay = new TextField();
+        TextField birthdayMonth = new TextField();
+        TextField birthdayYear = new TextField();
     
         email.setPromptText("Email");
         email.setText(student.getEmail());
@@ -87,14 +95,29 @@ public class EditStudentController {
         city.setText(student.getAddress().getCity());
         country.setPromptText("Country");
         country.setText(student.getAddress().getCountry());
-        birthday.setPromptText("Birthday");
-        birthday.setValue(student.getBirthDate());
+        birthdayDay.setPromptText("Day");
+        birthdayMonth.setPromptText("Month");
+        birthdayYear.setPromptText("Year");
+        LocalDate birthDate = student.getBirthDate();
+        if (birthDate != null) {
+            birthdayDay.setText(Integer.toString(birthDate.getDayOfMonth()));
+            birthdayMonth.setText(Integer.toString(birthDate.getMonthValue()));
+            birthdayYear.setText(Integer.toString(birthDate.getYear()));
+        }
     
         Button back = new Button("Back");
         Button update = new Button("Update");
         update.setOnAction(e -> {
+            int dayVal = Integer.parseInt(birthdayDay.getText());
+            int monthVal = Integer.parseInt(birthdayMonth.getText());
+            int yearVal = Integer.parseInt(birthdayYear.getText());
+            if (!Logic.dateTool(dayVal, monthVal, yearVal)) {
+                System.out.println("Invalid date");
+                return;
+            }
             Address updatedAddress = new Address(street.getText(), houseNumber.getText(), postalCode.getText(), city.getText(), country.getText());
-            studentDAO.updateStudent(new Student(email.getText(), name.getText(), birthday.getValue(), genderVal, updatedAddress));
+            LocalDate updatedBirthDate = LocalDate.of(yearVal, monthVal, dayVal);
+            studentDAO.updateStudent(new Student(email.getText(), name.getText(), updatedBirthDate, genderVal, updatedAddress));
             stage.close();
             StudentController.display();
         });
@@ -104,12 +127,16 @@ public class EditStudentController {
         hBox.setSpacing(70);
         back.setPrefSize(50, 30);
         update.setPrefSize(70, 30);
+
+        HBox birtdayBox = new HBox();
+        birtdayBox.getChildren().addAll(birthdayDay, birthdayMonth, birthdayYear);
+        birtdayBox.setSpacing(5);
     
         VBox vBox = new VBox();
         HBox gender = new HBox();
         gender.getChildren().addAll(male, female, other);
         gender.setSpacing(5);
-        vBox.getChildren().addAll(studentLabel, name, email, gender , street, houseNumber, postalCode, city, country, birthday, hBox);
+        vBox.getChildren().addAll(studentLabel, name, email, gender , street, houseNumber, postalCode, city, country, birtdayBox, hBox);
         vBox.setSpacing(25);
     
         root.setAlignment(Pos.CENTER);

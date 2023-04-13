@@ -1,7 +1,7 @@
 package com.codecademy.logic;
 public class Logic {
     
-    public boolean dateTool(int day, int month, int year)
+    public static boolean dateTool(int day, int month, int year)
     {
         if(day>1 && day<=31  && (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12))
         {

@@ -31,10 +31,9 @@ public class CourseDAOImpl implements CourseDAO {
 
             while (result.next()) {
                 Difficulty difficulty;
-                if (result.getString("Difficulty") == "Beginner" || result.getString("Difficulty") == "BEGINNER") {
+                if (result.getString("Difficulty").equals("Beginner") || result.getString("Difficulty").equals("BEGINNER")) {
                     difficulty = Difficulty.BEGINNER;
-                } else if (result.getString("Difficulty") == "Intermediate"
-                        || result.getString("Difficulty") == "INTERMEDIATE") {
+                } else if (result.getString("Difficulty").equals("Advanced") || result.getString("Difficulty").equals("ADVANCED")) {
                     difficulty = Difficulty.ADVANCED;
                 } else {
                     difficulty = Difficulty.EXPERT;
@@ -95,7 +94,7 @@ public class CourseDAOImpl implements CourseDAO {
     @Override
     public void addCourse(Course course) {
         try (Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("INSERT INTO Course VALUES(?, ?, ?, ?, ?, ?)");
+            PreparedStatement query = db.prepareStatement("INSERT INTO Course VALUES(?, ?, ?, ?, ?)");
             query.setString(1, course.getCourseName());
             query.setString(2, course.getCourseTopic());
             query.setString(3, course.getCourseIntroText());
@@ -113,12 +112,12 @@ public class CourseDAOImpl implements CourseDAO {
     public void updateCourse(Course course) {
         try (Connection db = dbConnection.getConnection()) {
             PreparedStatement query = db.prepareStatement(
-                    "UPDATE Course SET ModuleNumber = ?, CourseTopic = ?, CourseIntroText = ?, CourseTag = ?, Difficulty = ? WHERE CourseName = ?");
-            query.setString(2, course.getCourseTopic());
-            query.setString(3, course.getCourseIntroText());
-            query.setString(4, course.getCourseTag());
-            query.setString(5, course.getDifficulty().toString());
-            query.setString(6, course.getCourseName());
+                    "UPDATE Course SET CourseTopic = ?, CourseIntroText = ?, CourseTag = ?, Difficulty = ? WHERE CourseName = ?");
+            query.setString(1, course.getCourseTopic());
+            query.setString(2, course.getCourseIntroText());
+            query.setString(3, course.getCourseTag());
+            query.setString(4, course.getDifficulty().toString());
+            query.setString(5, course.getCourseName());
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error in updateCourse");
@@ -128,10 +127,30 @@ public class CourseDAOImpl implements CourseDAO {
 
     @Override
     public void deleteCourse(Course course) {
-        try (Connection db = dbConnection.getConnection()) {
-            PreparedStatement query = db.prepareStatement("DELETE FROM Course WHERE CourseName = ?");
-            query.setString(1, course.getCourseName());
-            query.executeUpdate();
+        try (Connection db = dbConnection.getConnection()) {           
+            // First, delete the corresponding rows from the Enrollment table
+            PreparedStatement enrollmentQuery = db.prepareStatement("DELETE FROM Enrollment WHERE CourseName = ?");
+            enrollmentQuery.setString(1, course.getCourseName());
+            enrollmentQuery.executeUpdate();
+        
+            // Next, delete the corresponding rows from the Module table
+            PreparedStatement moduleQuery = db.prepareStatement("DELETE FROM Module WHERE CourseName = ?");
+            moduleQuery.setString(1, course.getCourseName());
+            moduleQuery.executeUpdate();
+        
+            // Next, delete the corresponding rows from the CourseRecommendation1 table
+            PreparedStatement recommendationQuery = db.prepareStatement("DELETE FROM CourseRecommendation1 WHERE CourseName = ?");
+            recommendationQuery.setString(1, course.getCourseName());
+            recommendationQuery.executeUpdate();
+            recommendationQuery = db.prepareStatement("DELETE FROM CourseRecommendation1 WHERE RecommendedCourseName = ?");
+            recommendationQuery.setString(1, course.getCourseName());
+            recommendationQuery.executeUpdate();
+        
+            // Finally, delete the row from the Course table
+            PreparedStatement courseQuery = db.prepareStatement("DELETE FROM Course WHERE CourseName = ?");
+            courseQuery.setString(1, course.getCourseName());
+            courseQuery.executeUpdate();
+
         } catch (SQLException e) {
             System.out.println("Error in deleteCourse");
             e.printStackTrace();
