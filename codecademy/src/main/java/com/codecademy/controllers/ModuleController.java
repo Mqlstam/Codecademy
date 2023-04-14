@@ -85,6 +85,7 @@ public class ModuleController {
         
         add.setOnAction(e -> {
             AddModuleController.display();
+            stage.close();
         });
         
         edit.setOnAction(e -> {
@@ -95,7 +96,6 @@ public class ModuleController {
             } else {
                 System.out.println("Please select a module");
             }
-            stage.close();
         });
         
         back.setOnAction(e -> {

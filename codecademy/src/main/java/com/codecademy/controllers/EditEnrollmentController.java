@@ -1,5 +1,6 @@
 package com.codecademy.controllers;
 
+import com.codecademy.MainMenu;
 import com.codecademy.dao.CourseDAO;
 import com.codecademy.dao.CourseDAOImpl;
 import com.codecademy.dao.EnrollmentDAO;
@@ -82,6 +83,7 @@ public class EditEnrollmentController {
         });
 
         back.setOnAction(e -> {
+            EnrollmentController.display();
             stage.close();
         });
     }

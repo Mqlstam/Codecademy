@@ -17,6 +17,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -46,30 +47,34 @@ public class EditStudentController {
         RadioButton male = new RadioButton("Male");
         RadioButton female = new RadioButton("Female");
         RadioButton other = new RadioButton("Other");
-        if (student.getGender() == null){
-            genderVal = "Unknown";
-        } else if(student.getGender().equals("Male")){
-            male.selectedProperty().set(true);
-        }else if(student.getGender().equals("Other")){
-            other.selectedProperty().set(true);
-        }else if(student.getGender().equals("Female")){
-            female.selectedProperty().set(true);
+        ToggleGroup genderGroup = new ToggleGroup();
+        male.setToggleGroup(genderGroup);
+        female.setToggleGroup(genderGroup);
+        other.setToggleGroup(genderGroup);
+
+        if (student.getGender() == null) {
+            genderGroup.selectToggle(null);
+        } else if (student.getGender().equals("Male")) {
+            male.setSelected(true);
+        } else if (student.getGender().equals("Female")) {
+            female.setSelected(true);
+        } else if (student.getGender().equals("Other")) {
+            other.setSelected(true);
         }
-        male.setOnAction(event -> {
-            female.setSelected(false);
-            other.setSelected(false);
-            genderVal ="Male";
+
+        genderGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> {
+            if (genderGroup.getSelectedToggle() != null) {
+                genderVal = ((RadioButton) genderGroup.getSelectedToggle()).getText();
+            }
         });
-        female.setOnAction(event -> {
-            male.setSelected(false);
-            other.setSelected(false);
-            genderVal="Female";
-        });
-        other.setOnAction(event -> {
-            male.setSelected(false);
-            female.setSelected(false);
-            genderVal="Other";
-        });
+
+        male.setText("Male");
+        female.setText("Female");
+        other.setText("Other");
+
+        male.setUserData("Male");
+        female.setUserData("Female");
+        other.setUserData("Other");
     
         TextField street = new TextField();
         TextField houseNumber = new TextField();
@@ -117,7 +122,11 @@ public class EditStudentController {
             }
             Address updatedAddress = new Address(street.getText(), houseNumber.getText(), postalCode.getText(), city.getText(), country.getText());
             LocalDate updatedBirthDate = LocalDate.of(yearVal, monthVal, dayVal);
-            studentDAO.updateStudent(new Student(email.getText(), name.getText(), updatedBirthDate, genderVal, updatedAddress));
+            String selectedGender = "";
+            if (genderGroup.getSelectedToggle() != null) {
+                selectedGender = ((RadioButton) genderGroup.getSelectedToggle()).getText();
+            }
+            studentDAO.updateStudent(new Student(email.getText(), name.getText(), updatedBirthDate, selectedGender, updatedAddress));
             stage.close();
             StudentController.display();
         });

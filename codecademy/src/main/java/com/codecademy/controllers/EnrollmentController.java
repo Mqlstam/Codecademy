@@ -124,7 +124,6 @@ public class EnrollmentController {
             } else {
                 System.out.println("No enrollment selected");
             }
-            stage.close();
         });
 
         delete.setOnAction(e -> {

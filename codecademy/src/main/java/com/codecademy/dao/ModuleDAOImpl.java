@@ -136,8 +136,18 @@ public class ModuleDAOImpl implements ModuleDAO {
 
     @Override
     public void updateModule(Module module) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateModule'");
+        try (Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("UPDATE Module SET ContentID = ?, ModuleTitle = ?, Version = ?, ContactpersonEmail = ?, CourseName = ? WHERE FollowNumber = ?");
+            query.setInt(1, module.getContentId());
+            query.setString(2, module.getModuleTitle());
+            query.setFloat(3, module.getVersion());
+            query.setString(4, module.getContactPersonEmail());
+            query.setString(5, module.getCourseName());
+            query.setInt(6, module.getFollowNumber());
+            query.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error while updating module: " + e.getMessage());
+        }
     }
 
     @Override
