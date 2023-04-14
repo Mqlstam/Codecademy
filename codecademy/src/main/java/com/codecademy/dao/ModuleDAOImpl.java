@@ -97,8 +97,11 @@ public class ModuleDAOImpl implements ModuleDAO {
             ObservableList<Module> list = FXCollections.observableArrayList();
 
             while (result.next()) {
-                list.add(new Module(result.getInt("FollowNumber"), result.getString("ModuleTitle"),
-                        result.getInt("contentID"), result.getInt("Version"), result.getString("CourseName"),
+                list.add(new Module(result.getInt("FollowNumber"),
+                        result.getString("ModuleTitle"),
+                        result.getInt("contentID"), 
+                        result.getFloat("Version"), 
+                        result.getString("CourseName"),
                         result.getString("ContactpersonEmail")));
             }
             return list;
@@ -107,5 +110,44 @@ public class ModuleDAOImpl implements ModuleDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public ObservableList<Module> getModulesByCourse(String courseName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getModulesByCourse'");
+    }
+
+    @Override
+    public void addModule(Module module) {
+        try (Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("INSERT INTO Module (ContentID, ModuleTitle, Version, ContactpersonEmail, CourseName) VALUES (?, ?, ?, ?, ?)");
+            query.setInt(1, module.getContentId());
+            query.setString(2, module.getModuleTitle());
+            query.setFloat(3, module.getVersion());
+            query.setString(4, module.getContactPersonEmail());
+            query.setString(5, module.getCourseName());
+            query.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("Error in addModule");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateModule(Module module) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateModule'");
+    }
+
+    @Override
+    public void deleteModule(int followNumber) {
+        try (Connection db = dbConnection.getConnection()) {
+            PreparedStatement query = db.prepareStatement("DELETE FROM Module WHERE FollowNumber = ?");
+            query.setInt(1, followNumber);
+            query.executeUpdate();
+        } catch (Exception e) {
+
+        }
     }
 }

@@ -56,7 +56,6 @@ public class EnrollmentController {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.setPrefWidth(600);
 
-
         table.setItems(list);
         TableColumn<Enrollment, String> studentEmail = new TableColumn<>("StudentEmail");
         studentEmail.setCellValueFactory(new PropertyValueFactory<Enrollment, String>("StudentEmail"));

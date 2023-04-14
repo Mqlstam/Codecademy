@@ -4,12 +4,12 @@ public class Module {
     private int followNumber; // primary key
     private int contentID;
     private String moduleTitle;
-    private int version;
+    private Float version;
     private String contactPersonEmail;
     private String courseName;
 
     // Constructor
-    public Module(int followNumber, String moduleTitle, int contentID, int version, String courseName, String contactPersonEmail) {
+    public Module( int followNumber, String moduleTitle, int contentID, Float version, String courseName, String contactPersonEmail) {
         this.followNumber = followNumber;
         this.contentID = contentID;
         this.moduleTitle = moduleTitle;
@@ -17,6 +17,8 @@ public class Module {
         this.contactPersonEmail = contactPersonEmail;
         this.courseName = courseName;
     }
+
+    public Module(){};
 
     // Getters and setters
     public int getFollowNumber() {
@@ -27,11 +29,11 @@ public class Module {
         this.followNumber = followNumber;
     }
 
-    public int getContent() {
+    public int getContentId() {
         return contentID;
     }
 
-    public void setContent(int content) {
+    public void setContentId(int content) {
         this.contentID = content;
     }
 
@@ -43,11 +45,11 @@ public class Module {
         this.moduleTitle = moduleTitle;
     }
 
-    public int getVersion() {
+    public Float getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(Float version) {
         this.version = version;
     }
 
