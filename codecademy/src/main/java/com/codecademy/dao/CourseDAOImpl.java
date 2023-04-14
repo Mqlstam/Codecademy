@@ -126,14 +126,20 @@ public class CourseDAOImpl implements CourseDAO {
     }
 
     @Override
-    public void deleteCourse(Course course) {
+    public void deleteCourse(Course course) throws Exception {
         try (Connection db = dbConnection.getConnection()) {           
-            // First, delete the corresponding rows from the Enrollment table
-            PreparedStatement enrollmentQuery = db.prepareStatement("DELETE FROM Enrollment WHERE CourseName = ?");
-            enrollmentQuery.setString(1, course.getCourseName());
-            enrollmentQuery.executeUpdate();
-        
-            // Next, delete the corresponding rows from the Module table
+            // Check if there are any enrollments for the course
+            PreparedStatement enrollmentCheck = db.prepareStatement("SELECT COUNT(*) FROM Enrollment WHERE CourseName = ?");
+            enrollmentCheck.setString(1, course.getCourseName());
+            ResultSet enrollmentResult = enrollmentCheck.executeQuery();
+            enrollmentResult.next();
+            int enrollmentCount = enrollmentResult.getInt(1);
+            
+            if (enrollmentCount > 0) {
+                throw new Exception("Cannot delete course with existing enrollments");
+            }
+            
+            // First, delete the corresponding rows from the Module table
             PreparedStatement moduleQuery = db.prepareStatement("DELETE FROM Module WHERE CourseName = ?");
             moduleQuery.setString(1, course.getCourseName());
             moduleQuery.executeUpdate();
@@ -150,7 +156,7 @@ public class CourseDAOImpl implements CourseDAO {
             PreparedStatement courseQuery = db.prepareStatement("DELETE FROM Course WHERE CourseName = ?");
             courseQuery.setString(1, course.getCourseName());
             courseQuery.executeUpdate();
-
+    
         } catch (SQLException e) {
             System.out.println("Error in deleteCourse");
             e.printStackTrace();

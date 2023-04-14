@@ -116,7 +116,18 @@ public class CourseController {
         delete.setOnAction(e -> {
             Course course = table.getSelectionModel().getSelectedItem();
             if (course != null) {
-                courseDAO.deleteCourse(course); // remove student from the ObservableList
+                try {
+                    courseDAO.deleteCourse(course);
+                } catch (Exception e1) {
+                    // give error message
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Course is not deleted, because it is in use");
+                    alert.showAndWait();
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 stage.close();
                 display(); // refresh the TableView to reflect the changes            
             } else {

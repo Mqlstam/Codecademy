@@ -39,7 +39,11 @@ public class EditCertificateController {
         FlowPane root = new FlowPane();
 
         TextField grade = new TextField();
+        grade.setText(String.valueOf(certificate.getGrade()));
+
         TextField employee = new TextField();
+        employee.setText(certificate.getEmployee());
+        certificate.setEmployee(certificate.getEmployee());
 
         grade.setPromptText("grade");
         employee.setPromptText("Employee");

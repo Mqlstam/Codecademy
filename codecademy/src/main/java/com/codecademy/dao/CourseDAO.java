@@ -11,7 +11,7 @@ public interface CourseDAO {
     ObservableList<String> getAllCourseNames();
     void addCourse(Course course);
     void updateCourse(Course course);
-    void deleteCourse(Course course);
+    void deleteCourse(Course course) throws Exception;
     List<String> getTop3CertifiedCourses();
     public List<String> getRecommendedCourses(String selectedCourse);
     public int getNumCompletedCourses(String courseName);
